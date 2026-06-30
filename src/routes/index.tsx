@@ -203,7 +203,8 @@ function HomePage() {
                 <Link to={s.to} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-glow">
                   Learn more <ArrowRight className="h-3.5 w-3.5" />
 
-                </a>
+                </Link>
+
               </div>
             </div>
           ))}
