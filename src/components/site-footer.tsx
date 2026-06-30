@@ -1,16 +1,31 @@
+import { Link } from "@tanstack/react-router";
 import { Package } from "lucide-react";
+
+const SERVICES = [
+  { to: "/ocean-freight", label: "Ocean Freight" },
+  { to: "/air-cargo", label: "Air Cargo" },
+  { to: "/ground-logistics", label: "Ground Logistics" },
+  { to: "/warehousing", label: "Warehousing" },
+] as const;
+
+const COMPANY = [
+  { to: "/about", label: "About" },
+  { to: "/network", label: "Network" },
+  { to: "/careers", label: "Careers" },
+  { to: "/press", label: "Press" },
+] as const;
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-primary text-primary-foreground">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div>
-          <div className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-orange text-secondary-foreground">
               <Package className="h-5 w-5" />
             </span>
             <span className="font-display text-lg font-bold">TranSec Logistics</span>
-          </div>
+          </Link>
           <p className="mt-4 text-sm text-primary-foreground/70">
             Secure global logistics, engineered for enterprise scale.
           </p>
@@ -18,19 +33,21 @@ export function SiteFooter() {
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary">Services</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/75">
-            <li>Ocean Freight</li>
-            <li>Air Cargo</li>
-            <li>Ground Logistics</li>
-            <li>Warehousing</li>
+            {SERVICES.map(s => (
+              <li key={s.to}>
+                <Link to={s.to} className="transition-colors hover:text-secondary">{s.label}</Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary">Company</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/75">
-            <li>About</li>
-            <li>Network</li>
-            <li>Careers</li>
-            <li>Press</li>
+            {COMPANY.map(c => (
+              <li key={c.to}>
+                <Link to={c.to} className="transition-colors hover:text-secondary">{c.label}</Link>
+              </li>
+            ))}
           </ul>
         </div>
         <div>
