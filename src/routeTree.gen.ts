@@ -9,12 +9,60 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WarehousingRouteImport } from './routes/warehousing'
 import { Route as TrackingRouteImport } from './routes/tracking'
+import { Route as PressRouteImport } from './routes/press'
+import { Route as OceanFreightRouteImport } from './routes/ocean-freight'
+import { Route as NetworkRouteImport } from './routes/network'
+import { Route as GroundLogisticsRouteImport } from './routes/ground-logistics'
+import { Route as CareersRouteImport } from './routes/careers'
+import { Route as AirCargoRouteImport } from './routes/air-cargo'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WarehousingRoute = WarehousingRouteImport.update({
+  id: '/warehousing',
+  path: '/warehousing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TrackingRoute = TrackingRouteImport.update({
   id: '/tracking',
   path: '/tracking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PressRoute = PressRouteImport.update({
+  id: '/press',
+  path: '/press',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OceanFreightRoute = OceanFreightRouteImport.update({
+  id: '/ocean-freight',
+  path: '/ocean-freight',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NetworkRoute = NetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GroundLogisticsRoute = GroundLogisticsRouteImport.update({
+  id: '/ground-logistics',
+  path: '/ground-logistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AirCargoRoute = AirCargoRouteImport.update({
+  id: '/air-cargo',
+  path: '/air-cargo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,37 +73,156 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-cargo': typeof AirCargoRoute
+  '/careers': typeof CareersRoute
+  '/ground-logistics': typeof GroundLogisticsRoute
+  '/network': typeof NetworkRoute
+  '/ocean-freight': typeof OceanFreightRoute
+  '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
+  '/warehousing': typeof WarehousingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-cargo': typeof AirCargoRoute
+  '/careers': typeof CareersRoute
+  '/ground-logistics': typeof GroundLogisticsRoute
+  '/network': typeof NetworkRoute
+  '/ocean-freight': typeof OceanFreightRoute
+  '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
+  '/warehousing': typeof WarehousingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-cargo': typeof AirCargoRoute
+  '/careers': typeof CareersRoute
+  '/ground-logistics': typeof GroundLogisticsRoute
+  '/network': typeof NetworkRoute
+  '/ocean-freight': typeof OceanFreightRoute
+  '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
+  '/warehousing': typeof WarehousingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/tracking'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/air-cargo'
+    | '/careers'
+    | '/ground-logistics'
+    | '/network'
+    | '/ocean-freight'
+    | '/press'
+    | '/tracking'
+    | '/warehousing'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/tracking'
-  id: '__root__' | '/' | '/tracking'
+  to:
+    | '/'
+    | '/about'
+    | '/air-cargo'
+    | '/careers'
+    | '/ground-logistics'
+    | '/network'
+    | '/ocean-freight'
+    | '/press'
+    | '/tracking'
+    | '/warehousing'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/air-cargo'
+    | '/careers'
+    | '/ground-logistics'
+    | '/network'
+    | '/ocean-freight'
+    | '/press'
+    | '/tracking'
+    | '/warehousing'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AirCargoRoute: typeof AirCargoRoute
+  CareersRoute: typeof CareersRoute
+  GroundLogisticsRoute: typeof GroundLogisticsRoute
+  NetworkRoute: typeof NetworkRoute
+  OceanFreightRoute: typeof OceanFreightRoute
+  PressRoute: typeof PressRoute
   TrackingRoute: typeof TrackingRoute
+  WarehousingRoute: typeof WarehousingRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/warehousing': {
+      id: '/warehousing'
+      path: '/warehousing'
+      fullPath: '/warehousing'
+      preLoaderRoute: typeof WarehousingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tracking': {
       id: '/tracking'
       path: '/tracking'
       fullPath: '/tracking'
       preLoaderRoute: typeof TrackingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/press': {
+      id: '/press'
+      path: '/press'
+      fullPath: '/press'
+      preLoaderRoute: typeof PressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ocean-freight': {
+      id: '/ocean-freight'
+      path: '/ocean-freight'
+      fullPath: '/ocean-freight'
+      preLoaderRoute: typeof OceanFreightRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/network': {
+      id: '/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof NetworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ground-logistics': {
+      id: '/ground-logistics'
+      path: '/ground-logistics'
+      fullPath: '/ground-logistics'
+      preLoaderRoute: typeof GroundLogisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/air-cargo': {
+      id: '/air-cargo'
+      path: '/air-cargo'
+      fullPath: '/air-cargo'
+      preLoaderRoute: typeof AirCargoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,7 +237,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AirCargoRoute: AirCargoRoute,
+  CareersRoute: CareersRoute,
+  GroundLogisticsRoute: GroundLogisticsRoute,
+  NetworkRoute: NetworkRoute,
+  OceanFreightRoute: OceanFreightRoute,
+  PressRoute: PressRoute,
   TrackingRoute: TrackingRoute,
+  WarehousingRoute: WarehousingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
