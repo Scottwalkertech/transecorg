@@ -162,18 +162,21 @@ function HomePage() {
             {
               icon: Ship,
               title: "Ocean Freight",
+              to: "/ocean-freight" as const,
               desc: "FCL & LCL shipping with port-to-door coverage in 200+ ports worldwide.",
               points: ["Customs clearance", "Container tracking", "Bonded warehousing"],
             },
             {
               icon: Plane,
               title: "Air Cargo",
+              to: "/air-cargo" as const,
               desc: "Express and standard air freight with priority handling and same-day options.",
               points: ["Next-flight-out", "Cold chain", "Hazmat certified"],
             },
             {
               icon: Truck,
               title: "Ground Delivery",
+              to: "/ground-logistics" as const,
               desc: "Regional and last-mile delivery powered by our 9,400-vehicle fleet.",
               points: ["LTL & FTL trucking", "White-glove service", "Reverse logistics"],
             },
@@ -197,8 +200,9 @@ function HomePage() {
                     </li>
                   ))}
                 </ul>
-                <a href="#quote" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-glow">
+                <Link to={s.to} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-glow">
                   Learn more <ArrowRight className="h-3.5 w-3.5" />
+
                 </a>
               </div>
             </div>
