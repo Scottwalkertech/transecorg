@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
   Search,
   Ship,
@@ -34,14 +36,38 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+const quoteSchema = z.object({
+  from: z.string().trim().min(2, "Enter an origin city").max(80),
+  to: z.string().trim().min(2, "Enter a destination city").max(80),
+  weight: z.coerce.number().positive("Weight must be greater than 0").max(100000, "Weight too large"),
+  email: z.string().trim().email("Enter a valid email").max(255),
+});
+
 function HomePage() {
   const navigate = useNavigate();
   const [tracking, setTracking] = useState("");
+  const [quote, setQuote] = useState({ from: "", to: "", weight: "", email: "" });
 
   function handleTrack(e: React.FormEvent) {
     e.preventDefault();
-    const id = tracking.trim() || "TS-1029384756";
+    const id = tracking.trim() || "TRAX123";
+    toast.success("Locating your shipment…", { description: `Opening live tracking for ${id.toUpperCase()}` });
     navigate({ to: "/tracking", search: { id } });
+  }
+
+  function handleQuote(e: React.FormEvent) {
+    e.preventDefault();
+    const result = quoteSchema.safeParse(quote);
+    if (!result.success) {
+      toast.error("Please check your quote details", {
+        description: result.error.issues[0]?.message ?? "Some fields are invalid.",
+      });
+      return;
+    }
+    toast.success("Quote request received", {
+      description: `We'll email ${result.data.email} within 60 seconds with options for ${result.data.from} → ${result.data.to}.`,
+    });
+    setQuote({ from: "", to: "", weight: "", email: "" });
   }
 
   return (
