@@ -94,42 +94,45 @@ function HomePage() {
               </div>
             </div>
 
-            {/* Visual card */}
+            {/* Visual: courier photo with floating tracking card */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm shadow-elegant">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="rounded-full bg-success/20 px-2.5 py-1 font-semibold uppercase tracking-wider text-success">Live</span>
-                  <span className="text-primary-foreground/60">TS-1029384756</span>
-                </div>
-                <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-wider text-primary-foreground/60">Origin</p>
-                    <p className="mt-1 font-semibold">Rotterdam, NL</p>
-                  </div>
-                  <div>
-                    <p className="text-[11px] uppercase tracking-wider text-primary-foreground/60">Destination</p>
-                    <p className="mt-1 font-semibold">New York, US</p>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <div className="flex justify-between text-[11px] uppercase tracking-wider text-primary-foreground/60">
-                    <span>In transit</span><span>72%</span>
-                  </div>
-                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-primary-foreground/10">
-                    <div className="h-full w-[72%] rounded-full bg-gradient-orange" />
+              <div className="relative">
+                <div className="relative overflow-hidden rounded-3xl border border-primary-foreground/15 shadow-elegant">
+                  <img
+                    src={heroCourier}
+                    alt="Smiling TranSec logistics professional holding a tablet in a warehouse"
+                    width={1024}
+                    height={1280}
+                    className="h-[520px] w-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
+                  <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary shadow-card">
+                    <span className="h-1.5 w-1.5 rounded-full bg-success" /> Live agent · Amir
                   </div>
                 </div>
-                <div className="mt-6 grid grid-cols-3 gap-3 text-center text-xs">
-                  {[
-                    { label: "Picked Up", on: true },
-                    { label: "In Transit", on: true },
-                    { label: "Delivered", on: false },
-                  ].map(s => (
-                    <div key={s.label} className={`rounded-lg border p-3 ${s.on ? "border-secondary/40 bg-secondary/10 text-secondary" : "border-primary-foreground/15 text-primary-foreground/60"}`}>
-                      <CheckCircle2 className={`mx-auto h-4 w-4 ${s.on ? "text-secondary" : "text-primary-foreground/40"}`} />
-                      <p className="mt-1.5 font-medium">{s.label}</p>
+                <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="rounded-full bg-success/15 px-2.5 py-1 font-semibold uppercase tracking-wider text-success">Live</span>
+                    <span className="text-muted-foreground">TS-1029384756</span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Origin</p>
+                      <p className="mt-1 font-semibold text-foreground">Rotterdam, NL</p>
                     </div>
-                  ))}
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Destination</p>
+                      <p className="mt-1 font-semibold text-foreground">New York, US</p>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <div className="flex justify-between text-[11px] uppercase tracking-wider text-muted-foreground">
+                      <span>In transit</span><span>72%</span>
+                    </div>
+                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+                      <div className="h-full w-[72%] rounded-full bg-gradient-orange" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
