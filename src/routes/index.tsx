@@ -282,6 +282,76 @@ function HomePage() {
         </div>
       </section>
 
+      {/* TESTIMONIALS */}
+      <section className="border-t border-border bg-muted/40">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Customer Stories</span>
+            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Loved by shippers worldwide
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              From boutique brands to Fortune 500 supply chains — hear why teams choose TranSec.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                photo: testimonial1,
+                name: "Elena Marchetti",
+                title: "COO, Nordic Apparel Co.",
+                quote:
+                  "TranSec cut our EU-to-US transit time by 30% and their support desk actually picks up. Game changer for our launches.",
+              },
+              {
+                photo: testimonial2,
+                name: "David Chen",
+                title: "Founder, Vessel Coffee",
+                quote:
+                  "The real-time tracking is unmatched. Our wholesale customers know exactly when to expect their pallets — every single time.",
+              },
+              {
+                photo: testimonial3,
+                name: "Amara Okafor",
+                title: "VP Ops, Lumen Health",
+                quote:
+                  "Cold-chain integrity, customs paperwork, temperature logs — TranSec handles the details so our team can focus on patients.",
+              },
+            ].map(t => (
+              <figure
+                key={t.name}
+                className="relative flex flex-col rounded-2xl border border-border bg-card p-7 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
+              >
+                <Quote className="h-8 w-8 text-secondary/60" />
+                <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-foreground/85">
+                  "{t.quote}"
+                </blockquote>
+                <div className="mt-5 flex items-center gap-1 text-secondary" aria-label="5 out of 5 stars">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+                <figcaption className="mt-5 flex items-center gap-3 border-t border-border pt-5">
+                  <img
+                    src={t.photo}
+                    alt={t.name}
+                    loading="lazy"
+                    width={512}
+                    height={512}
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-secondary/30"
+                  />
+                  <div>
+                    <p className="font-display text-sm font-semibold text-foreground">{t.name}</p>
+                    <p className="text-xs text-muted-foreground">{t.title}</p>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* QUOTE CTA */}
       <section id="quote" className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-gradient-hero p-10 text-primary-foreground shadow-elegant sm:p-14">
