@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
   Search,
   Ship,
@@ -34,14 +36,38 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+const quoteSchema = z.object({
+  from: z.string().trim().min(2, "Enter an origin city").max(80),
+  to: z.string().trim().min(2, "Enter a destination city").max(80),
+  weight: z.coerce.number().positive("Weight must be greater than 0").max(100000, "Weight too large"),
+  email: z.string().trim().email("Enter a valid email").max(255),
+});
+
 function HomePage() {
   const navigate = useNavigate();
   const [tracking, setTracking] = useState("");
+  const [quote, setQuote] = useState({ from: "", to: "", weight: "", email: "" });
 
   function handleTrack(e: React.FormEvent) {
     e.preventDefault();
-    const id = tracking.trim() || "TS-1029384756";
+    const id = tracking.trim() || "TRAX123";
+    toast.success("Locating your shipment…", { description: `Opening live tracking for ${id.toUpperCase()}` });
     navigate({ to: "/tracking", search: { id } });
+  }
+
+  function handleQuote(e: React.FormEvent) {
+    e.preventDefault();
+    const result = quoteSchema.safeParse(quote);
+    if (!result.success) {
+      toast.error("Please check your quote details", {
+        description: result.error.issues[0]?.message ?? "Some fields are invalid.",
+      });
+      return;
+    }
+    toast.success("Quote request received", {
+      description: `We'll email ${result.data.email} within 60 seconds with options for ${result.data.from} → ${result.data.to}.`,
+    });
+    setQuote({ from: "", to: "", weight: "", email: "" });
   }
 
   return (
@@ -75,7 +101,7 @@ function HomePage() {
                   <input
                     value={tracking}
                     onChange={e => setTracking(e.target.value)}
-                    placeholder="Enter tracking number (e.g. TS-1029384756)"
+                    placeholder="Enter tracking number (try TRAX123, TRAX456, TRAX789)"
                     className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"
                   />
                 </div>
@@ -113,7 +139,7 @@ function HomePage() {
                 <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
                   <div className="flex items-center justify-between text-xs">
                     <span className="rounded-full bg-success/15 px-2.5 py-1 font-semibold uppercase tracking-wider text-success">Live</span>
-                    <span className="text-muted-foreground">TS-1029384756</span>
+                    <span className="text-muted-foreground">TRAX123</span>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                     <div>
@@ -366,31 +392,32 @@ function HomePage() {
                 Tell us about your lane and volume — our team will respond with options across ocean, air and ground.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="mailto:quote@transec.example"
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-orange px-6 py-3 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
-                >
-                  Get a Quote <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href="/tracking"
+                <Link
+                  to="/tracking"
+                  search={{ id: "TRAX123" }}
                   className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/25 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
-                  Track a shipment
-                </a>
+                  Track a shipment <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
-            <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm">
+            <form
+              onSubmit={handleQuote}
+              className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm"
+            >
               <div className="grid grid-cols-2 gap-4">
-                <Field label="From" value="City, Country" />
-                <Field label="To" value="City, Country" />
-                <Field label="Weight (kg)" value="0" />
-                <Field label="Service" value="Air Express" />
+                <QuoteField label="From" placeholder="City, Country" value={quote.from} onChange={v => setQuote(q => ({ ...q, from: v }))} />
+                <QuoteField label="To" placeholder="City, Country" value={quote.to} onChange={v => setQuote(q => ({ ...q, to: v }))} />
+                <QuoteField label="Weight (kg)" placeholder="0" type="number" value={quote.weight} onChange={v => setQuote(q => ({ ...q, weight: v }))} />
+                <QuoteField label="Email" placeholder="you@company.com" type="email" value={quote.email} onChange={v => setQuote(q => ({ ...q, email: v }))} />
               </div>
-              <button className="mt-5 w-full rounded-lg bg-gradient-orange py-3 text-sm font-semibold text-secondary-foreground shadow-glow">
-                Calculate estimate
+              <button
+                type="submit"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-orange py-3 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.01]"
+              >
+                Get a Quote <ArrowRight className="h-4 w-4" />
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -398,11 +425,30 @@ function HomePage() {
   );
 }
 
-function Field({ label, value }: { label: string; value: string }) {
+function QuoteField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+}) {
   return (
-    <div className="rounded-lg border border-primary-foreground/15 bg-background/95 px-3 py-2.5">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="text-sm font-medium text-foreground">{value}</p>
-    </div>
+    <label className="block rounded-lg border border-primary-foreground/15 bg-background/95 px-3 py-2">
+      <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="mt-0.5 w-full bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground/70"
+      />
+    </label>
   );
 }
+
