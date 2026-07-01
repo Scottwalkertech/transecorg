@@ -157,6 +157,65 @@ function HomePage() {
         </div>
       </section>
 
+      {/* WHY CHOOSE US / TEAM */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+          <div className="lg:col-span-5">
+            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Why TranSec</span>
+            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              People you can trust with every package.
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Behind every shipment is a real person — from our 24/7 support desk to warehouse teams and last-mile drivers. We hire for care as much as capability.
+            </p>
+            <ul className="mt-6 space-y-3 text-sm">
+              {[
+                "Dedicated account manager on every enterprise lane",
+                "Multilingual support in 14 languages, 24/7",
+                "Background-checked drivers and vetted facility staff",
+              ].map(p => (
+                <li key={p} className="flex items-start gap-2 text-foreground/85">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-secondary" /> {p}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="lg:col-span-7">
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
+              {[
+                { src: teamSupport, name: "Priya", role: "Customer Success", tall: true },
+                { src: teamWarehouse, name: "Marcus", role: "Warehouse Lead" },
+                { src: teamDriver, name: "Jonas", role: "Fleet Driver" },
+              ].map((m, i) => (
+                <div
+                  key={m.name}
+                  className={`group relative overflow-hidden rounded-2xl border border-border shadow-card ${
+                    i === 0 ? "row-span-2" : ""
+                  }`}
+                >
+                  <img
+                    src={m.src}
+                    alt={`${m.name}, ${m.role} at TranSec Logistics`}
+                    loading="lazy"
+                    width={800}
+                    height={1000}
+                    className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
+                      m.tall ? "h-full min-h-[420px]" : "h-56 sm:h-64"
+                    }`}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary/90 via-primary/40 to-transparent p-4">
+                    <p className="font-display text-base font-semibold text-primary-foreground">{m.name}</p>
+                    <p className="text-xs uppercase tracking-wider text-secondary">{m.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
       {/* SERVICES */}
       <section id="services" className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
