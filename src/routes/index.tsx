@@ -10,7 +10,16 @@ import {
   Globe2,
   ArrowRight,
   CheckCircle2,
+  Quote,
+  Star,
 } from "lucide-react";
+import heroCourier from "@/assets/hero-courier.jpg";
+import teamSupport from "@/assets/team-support.jpg";
+import teamWarehouse from "@/assets/team-warehouse.jpg";
+import teamDriver from "@/assets/team-driver.jpg";
+import testimonial1 from "@/assets/testimonial-1.jpg";
+import testimonial2 from "@/assets/testimonial-2.jpg";
+import testimonial3 from "@/assets/testimonial-3.jpg";
 
 
 export const Route = createFileRoute("/")({
