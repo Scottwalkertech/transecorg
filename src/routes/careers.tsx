@@ -76,13 +76,42 @@ function CareersPage() {
   );
 }
 
+const applicationSchema = z.object({
+  first: z.string().trim().min(1, "First name is required").max(60),
+  last: z.string().trim().min(1, "Last name is required").max(60),
+  email: z.string().trim().email("Enter a valid email address").max(255),
+  url: z.string().trim().url("Enter a valid URL").max(255).or(z.literal("")),
+  reason: z.string().trim().min(10, "Tell us a little more (10+ chars)").max(2000),
+  resume: z.string().min(1, "Please attach your resume"),
+});
+
 function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ first: "", last: "", email: "", url: "", reason: "", resume: "" });
+
+  function update<K extends keyof typeof form>(k: K, v: string) {
+    setForm(f => ({ ...f, [k]: v }));
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const result = applicationSchema.safeParse(form);
+    if (!result.success) {
+      toast.error("Please fix the highlighted fields", {
+        description: result.error.issues[0]?.message ?? "Some fields are invalid.",
+      });
+      return;
+    }
+    toast.success("Application submitted", {
+      description: `Thanks ${result.data.first}! We'll review your application for ${job.title} and reply within 5 business days.`,
+    });
+    setSubmitted(true);
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/60 p-4 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-primary/60 p-4 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
       <div
-        className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-card shadow-elegant"
+        className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-card shadow-elegant animate-in zoom-in-95 duration-200"
         onClick={e => e.stopPropagation()}
       >
         <div className="bg-gradient-hero px-6 py-5 text-primary-foreground">
@@ -107,28 +136,44 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
             <button onClick={onClose} className="mt-6 inline-flex items-center rounded-md bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90">Close</button>
           </div>
         ) : (
-          <form
-            onSubmit={e => { e.preventDefault(); setSubmitted(true); }}
-            className="space-y-4 p-6"
-          >
+          <form onSubmit={handleSubmit} className="space-y-4 p-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="First name" name="first" />
-              <Field label="Last name" name="last" />
+              <Field label="First name" value={form.first} onChange={v => update("first", v)} />
+              <Field label="Last name" value={form.last} onChange={v => update("last", v)} />
             </div>
-            <Field label="Email" name="email" type="email" />
-            <Field label="LinkedIn / Portfolio URL" name="url" type="url" required={false} />
+            <Field label="Email" type="email" value={form.email} onChange={v => update("email", v)} />
+            <Field label="LinkedIn / Portfolio URL" type="url" value={form.url} onChange={v => update("url", v)} placeholder="https://" />
+
+            <div>
+              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Resume</label>
+              <label className="mt-1.5 flex cursor-pointer items-center justify-between gap-3 rounded-md border border-dashed border-input bg-muted/30 px-3 py-3 text-sm transition-colors hover:border-secondary hover:bg-muted/50">
+                <span className="flex min-w-0 items-center gap-2 text-muted-foreground">
+                  {form.resume ? <FileText className="h-4 w-4 shrink-0 text-secondary" /> : <Upload className="h-4 w-4 shrink-0" />}
+                  <span className="truncate">{form.resume || "Upload PDF or DOCX (max 5 MB)"}</span>
+                </span>
+                <span className="shrink-0 rounded bg-primary px-2.5 py-1 text-[11px] font-semibold text-primary-foreground">Browse</span>
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  className="hidden"
+                  onChange={e => update("resume", e.target.files?.[0]?.name ?? "")}
+                />
+              </label>
+            </div>
+
             <div>
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Why TranSec?</label>
               <textarea
-                required
                 rows={4}
+                value={form.reason}
+                onChange={e => update("reason", e.target.value)}
                 className="mt-1.5 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 placeholder="Tell us a bit about your interest and experience."
               />
             </div>
             <button
               type="submit"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-orange px-5 py-2.5 text-sm font-semibold text-secondary-foreground shadow-glow"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-gradient-orange px-5 py-2.5 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.01]"
             >
               <Send className="h-4 w-4" /> Submit application
             </button>
@@ -139,14 +184,27 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
   );
 }
 
-function Field({ label, name, type = "text", required = true }: { label: string; name: string; type?: string; required?: boolean }) {
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  placeholder,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  placeholder?: string;
+}) {
   return (
     <div>
       <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}</label>
       <input
-        name={name}
         type={type}
-        required={required}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
         className="mt-1.5 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
       />
     </div>
