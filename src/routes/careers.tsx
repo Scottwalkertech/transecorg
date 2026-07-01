@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Briefcase, MapPin, Clock, X, Send } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Briefcase, MapPin, Clock, X, Send, Upload, FileText } from "lucide-react";
 import { PageShell } from "@/components/page-shell";
 
 export const Route = createFileRoute("/careers")({
