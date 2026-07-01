@@ -392,31 +392,32 @@ function HomePage() {
                 Tell us about your lane and volume — our team will respond with options across ocean, air and ground.
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href="mailto:quote@transec.example"
-                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-orange px-6 py-3 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
-                >
-                  Get a Quote <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href="/tracking"
+                <Link
+                  to="/tracking"
+                  search={{ id: "TRAX123" }}
                   className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/25 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
-                  Track a shipment
-                </a>
+                  Track a shipment <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
             </div>
-            <div className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm">
+            <form
+              onSubmit={handleQuote}
+              className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm"
+            >
               <div className="grid grid-cols-2 gap-4">
-                <Field label="From" value="City, Country" />
-                <Field label="To" value="City, Country" />
-                <Field label="Weight (kg)" value="0" />
-                <Field label="Service" value="Air Express" />
+                <QuoteField label="From" placeholder="City, Country" value={quote.from} onChange={v => setQuote(q => ({ ...q, from: v }))} />
+                <QuoteField label="To" placeholder="City, Country" value={quote.to} onChange={v => setQuote(q => ({ ...q, to: v }))} />
+                <QuoteField label="Weight (kg)" placeholder="0" type="number" value={quote.weight} onChange={v => setQuote(q => ({ ...q, weight: v }))} />
+                <QuoteField label="Email" placeholder="you@company.com" type="email" value={quote.email} onChange={v => setQuote(q => ({ ...q, email: v }))} />
               </div>
-              <button className="mt-5 w-full rounded-lg bg-gradient-orange py-3 text-sm font-semibold text-secondary-foreground shadow-glow">
-                Calculate estimate
+              <button
+                type="submit"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-orange py-3 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.01]"
+              >
+                Get a Quote <ArrowRight className="h-4 w-4" />
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </section>
@@ -424,11 +425,30 @@ function HomePage() {
   );
 }
 
-function Field({ label, value }: { label: string; value: string }) {
+function QuoteField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+}) {
   return (
-    <div className="rounded-lg border border-primary-foreground/15 bg-background/95 px-3 py-2.5">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</p>
-      <p className="text-sm font-medium text-foreground">{value}</p>
-    </div>
+    <label className="block rounded-lg border border-primary-foreground/15 bg-background/95 px-3 py-2">
+      <span className="block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{label}</span>
+      <input
+        type={type}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="mt-0.5 w-full bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground/70"
+      />
+    </label>
   );
 }
+
