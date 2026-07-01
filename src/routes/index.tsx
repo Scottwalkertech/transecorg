@@ -139,7 +139,7 @@ function HomePage() {
                 <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
                   <div className="flex items-center justify-between text-xs">
                     <span className="rounded-full bg-success/15 px-2.5 py-1 font-semibold uppercase tracking-wider text-success">Live</span>
-                    <span className="text-muted-foreground">TS-1029384756</span>
+                    <span className="text-muted-foreground">TRAX123</span>
                   </div>
                   <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                     <div>
