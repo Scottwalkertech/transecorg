@@ -135,9 +135,6 @@ function HomePage() {
                     className="h-[520px] w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
-                  <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary shadow-card">
-                    <span className="h-1.5 w-1.5 rounded-full bg-success" /> Live agent · Amir
-                  </div>
                 </div>
                 <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
                   <div className="flex items-center justify-between text-xs">
