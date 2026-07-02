@@ -43,7 +43,13 @@ export function SiteHeader() {
           </a>
         </nav>
 
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 md:flex">
+          <Link
+            to="/portal"
+            className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
+          >
+            Sign In
+          </Link>
           <a
             href="/#quote"
             className="inline-flex items-center rounded-md bg-gradient-orange px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
