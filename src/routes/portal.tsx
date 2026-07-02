@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { LogIn, UserPlus, ShieldCheck, Package, ArrowRight, Lock, Mail, Building2, User } from "lucide-react";
+import { getSession, setSession as saveSession } from "@/lib/mock-session";
 
 export const Route = createFileRoute("/portal")({
   head: () => ({
@@ -29,24 +30,33 @@ const signUpSchema = z.object({
 });
 
 function PortalPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [signIn, setSignIn] = useState({ email: "", password: "" });
   const [signUp, setSignUp] = useState({ company: "", fullName: "", email: "", password: "" });
+
+  useEffect(() => {
+    if (getSession()) navigate({ to: "/portal/dashboard" });
+  }, [navigate]);
 
   function submitSignIn(e: React.FormEvent) {
     e.preventDefault();
     const r = signInSchema.safeParse(signIn);
     if (!r.success) return toast.error("Check your details", { description: r.error.issues[0]?.message });
+    const derivedName = r.data.email.split("@")[0].replace(/[._-]+/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+    const derivedCompany = (r.data.email.split("@")[1] ?? "acme.co").split(".")[0].replace(/\b\w/g, c => c.toUpperCase()) + " Inc.";
+    saveSession({ email: r.data.email, fullName: derivedName || "TranSec Client", company: derivedCompany, createdAt: new Date().toISOString() });
     toast.success("Welcome back", { description: `Signed in as ${r.data.email}` });
-    setSignIn({ email: "", password: "" });
+    navigate({ to: "/portal/dashboard" });
   }
 
   function submitSignUp(e: React.FormEvent) {
     e.preventDefault();
     const r = signUpSchema.safeParse(signUp);
     if (!r.success) return toast.error("Check your details", { description: r.error.issues[0]?.message });
-    toast.success("Account created", { description: `Welcome to TranSec, ${r.data.fullName}. Check ${r.data.email} to verify.` });
-    setSignUp({ company: "", fullName: "", email: "", password: "" });
+    saveSession({ company: r.data.company, fullName: r.data.fullName, email: r.data.email, createdAt: new Date().toISOString() });
+    toast.success("Account created", { description: `Welcome to TranSec, ${r.data.fullName}.` });
+    navigate({ to: "/portal/dashboard" });
   }
 
   return (

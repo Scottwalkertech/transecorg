@@ -20,6 +20,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AirCargoRouteImport } from './routes/air-cargo'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
 
 const WarehousingRoute = WarehousingRouteImport.update({
   id: '/warehousing',
@@ -76,6 +77,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalDashboardRoute = PortalDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => PortalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -85,10 +91,11 @@ export interface FileRoutesByFullPath {
   '/ground-logistics': typeof GroundLogisticsRoute
   '/network': typeof NetworkRoute
   '/ocean-freight': typeof OceanFreightRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -98,10 +105,11 @@ export interface FileRoutesByTo {
   '/ground-logistics': typeof GroundLogisticsRoute
   '/network': typeof NetworkRoute
   '/ocean-freight': typeof OceanFreightRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -112,10 +120,11 @@ export interface FileRoutesById {
   '/ground-logistics': typeof GroundLogisticsRoute
   '/network': typeof NetworkRoute
   '/ocean-freight': typeof OceanFreightRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/portal/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/portal/dashboard'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/portal/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -167,7 +179,7 @@ export interface RootRouteChildren {
   GroundLogisticsRoute: typeof GroundLogisticsRoute
   NetworkRoute: typeof NetworkRoute
   OceanFreightRoute: typeof OceanFreightRoute
-  PortalRoute: typeof PortalRoute
+  PortalRoute: typeof PortalRouteWithChildren
   PressRoute: typeof PressRoute
   TrackingRoute: typeof TrackingRoute
   WarehousingRoute: typeof WarehousingRoute
@@ -252,8 +264,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/dashboard': {
+      id: '/portal/dashboard'
+      path: '/dashboard'
+      fullPath: '/portal/dashboard'
+      preLoaderRoute: typeof PortalDashboardRouteImport
+      parentRoute: typeof PortalRoute
+    }
   }
 }
+
+interface PortalRouteChildren {
+  PortalDashboardRoute: typeof PortalDashboardRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalDashboardRoute: PortalDashboardRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -263,7 +293,7 @@ const rootRouteChildren: RootRouteChildren = {
   GroundLogisticsRoute: GroundLogisticsRoute,
   NetworkRoute: NetworkRoute,
   OceanFreightRoute: OceanFreightRoute,
-  PortalRoute: PortalRoute,
+  PortalRoute: PortalRouteWithChildren,
   PressRoute: PressRoute,
   TrackingRoute: TrackingRoute,
   WarehousingRoute: WarehousingRoute,
