@@ -22,6 +22,9 @@ import teamDriver from "@/assets/team-driver.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.jpg";
 import testimonial3 from "@/assets/testimonial-3.jpg";
+import tierOcean from "@/assets/tier-ocean.jpg";
+import tierAir from "@/assets/tier-air.jpg";
+import tierGround from "@/assets/tier-ground.jpg";
 
 
 export const Route = createFileRoute("/")({
