@@ -22,6 +22,9 @@ import teamDriver from "@/assets/team-driver.jpg";
 import testimonial1 from "@/assets/testimonial-1.jpg";
 import testimonial2 from "@/assets/testimonial-2.jpg";
 import testimonial3 from "@/assets/testimonial-3.jpg";
+import tierOcean from "@/assets/tier-ocean.jpg";
+import tierAir from "@/assets/tier-air.jpg";
+import tierGround from "@/assets/tier-ground.jpg";
 
 
 export const Route = createFileRoute("/")({
@@ -132,9 +135,6 @@ function HomePage() {
                     className="h-[520px] w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
-                  <div className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary shadow-card">
-                    <span className="h-1.5 w-1.5 rounded-full bg-success" /> Live agent · Amir
-                  </div>
                 </div>
                 <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
                   <div className="flex items-center justify-between text-xs">
@@ -258,6 +258,7 @@ function HomePage() {
           {[
             {
               icon: Ship,
+              image: tierOcean,
               title: "Ocean Freight",
               to: "/ocean-freight" as const,
               desc: "FCL & LCL shipping with port-to-door coverage in 200+ ports worldwide.",
@@ -265,6 +266,7 @@ function HomePage() {
             },
             {
               icon: Plane,
+              image: tierAir,
               title: "Air Cargo",
               to: "/air-cargo" as const,
               desc: "Express and standard air freight with priority handling and same-day options.",
@@ -272,6 +274,7 @@ function HomePage() {
             },
             {
               icon: Truck,
+              image: tierGround,
               title: "Ground Delivery",
               to: "/ground-logistics" as const,
               desc: "Regional and last-mile delivery powered by our 9,400-vehicle fleet.",
@@ -280,14 +283,24 @@ function HomePage() {
           ].map(s => (
             <div
               key={s.title}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-7 shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-all hover:-translate-y-1 hover:shadow-elegant"
             >
-              <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-secondary/0 transition-colors group-hover:bg-secondary/10" aria-hidden />
-              <div className="relative">
-                <div className="inline-grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground shadow-elegant">
-                  <s.icon className="h-6 w-6" />
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={s.image}
+                  alt={`${s.title} — TranSec service`}
+                  loading="lazy"
+                  width={1024}
+                  height={1024}
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
+                <div className="absolute left-4 top-4 inline-grid h-11 w-11 place-items-center rounded-xl bg-primary text-primary-foreground shadow-elegant ring-1 ring-primary-foreground/10">
+                  <s.icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-5 font-display text-xl font-bold text-foreground">{s.title}</h3>
+              </div>
+              <div className="flex flex-1 flex-col p-7">
+                <h3 className="font-display text-xl font-bold text-foreground">{s.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
                 <ul className="mt-5 space-y-2">
                   {s.points.map(p => (
@@ -299,9 +312,7 @@ function HomePage() {
                 </ul>
                 <Link to={s.to} className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary-glow">
                   Learn more <ArrowRight className="h-3.5 w-3.5" />
-
                 </Link>
-
               </div>
             </div>
           ))}
