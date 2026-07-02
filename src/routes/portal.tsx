@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { LogIn, UserPlus, ShieldCheck, Package, ArrowRight, Lock, Mail, Building2, User } from "lucide-react";
+import { getSession, setSession as saveSession } from "@/lib/mock-session";
 
 export const Route = createFileRoute("/portal")({
   head: () => ({
