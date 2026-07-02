@@ -51,12 +51,21 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <Link
-            to="/portal"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
-          >
-            Sign In
-          </Link>
+          {session ? (
+            <Link
+              to="/portal/dashboard"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm font-medium text-foreground/85 hover:bg-muted"
+            >
+              <LayoutDashboard className="h-4 w-4" /> Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/portal"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
+            >
+              Sign In
+            </Link>
+          )}
           <a
             href="/#quote"
             className="inline-flex items-center rounded-md bg-gradient-orange px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
