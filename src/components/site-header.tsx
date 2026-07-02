@@ -1,9 +1,16 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Package, Menu, X, LayoutDashboard } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [session, setSession] = useState<MockSession | null>(null);
+  useEffect(() => {
+    const sync = () => setSession(getSession());
+    sync();
+    return useSessionSync(sync);
+  }, []);
   const nav = [
     { to: "/", label: "Home" },
     { to: "/tracking", label: "Track" },
