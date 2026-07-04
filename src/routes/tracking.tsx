@@ -15,11 +15,13 @@ import {
   Search,
   ShieldCheck,
   RefreshCw,
+  AlertTriangle,
 } from "lucide-react";
-import { getShipment } from "@/lib/shipments";
+import { findShipment } from "@/lib/shipments";
+import { subscribeAdminShipments } from "@/lib/admin-shipments";
 
 const searchSchema = z.object({
-  id: z.string().optional().default("TRAX123"),
+  id: z.string().optional().default(""),
 });
 
 export const Route = createFileRoute("/tracking")({
