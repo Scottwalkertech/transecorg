@@ -345,3 +345,73 @@ function Pin({ top, left, label, tone }: { top: string; left: string; label: str
     </div>
   );
 }
+
+function NotFoundView({
+  id,
+  input,
+  setInput,
+  onSubmit,
+}: {
+  id: string;
+  input: string;
+  setInput: (v: string) => void;
+  onSubmit: (v: string) => void;
+}) {
+  return (
+    <div className="bg-muted/30">
+      <section className="border-b border-border bg-background">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-destructive">Tracking · Not Found</p>
+          <h1 className="mt-1 font-display text-2xl font-bold text-foreground sm:text-3xl">
+            {id ? <>Shipment <span className="text-destructive">{id}</span></> : "Enter a tracking number"}
+          </h1>
+          <form
+            onSubmit={e => { e.preventDefault(); onSubmit(input.trim()); }}
+            className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-border bg-card p-2 shadow-card sm:flex"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Enter tracking number"
+                className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              />
+            </div>
+            <button className="shrink-0 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-glow">
+              Track
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-destructive/25 bg-card p-10 text-center shadow-card">
+          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-destructive/10 text-destructive">
+            <AlertTriangle className="h-7 w-7" />
+          </div>
+          <h2 className="mt-5 font-display text-xl font-bold text-foreground">
+            Tracking ID not recognized.
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Please verify your number or contact support.
+          </p>
+          <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted"
+            >
+              Back to home
+            </Link>
+            <a
+              href="mailto:support@transec.example"
+              className="inline-flex items-center gap-2 rounded-lg bg-gradient-orange px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-glow"
+            >
+              Contact support
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
