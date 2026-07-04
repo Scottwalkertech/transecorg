@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X, LayoutDashboard } from "lucide-react";
+import { Package, Menu, X, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
 
@@ -48,6 +48,9 @@ export function SiteHeader() {
           <a href="/#quote" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground">
             Get a Quote
           </a>
+          <Link to="/admin" className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground">
+            <ShieldCheck className="h-4 w-4" /> Admin
+          </Link>
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">

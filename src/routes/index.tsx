@@ -15,17 +15,20 @@ import {
   Quote,
   Star,
 } from "lucide-react";
-import heroCourier from "@/assets/hero-courier.jpg";
-import teamSupport from "@/assets/team-support.jpg";
-import teamWarehouse from "@/assets/team-warehouse.jpg";
-import teamDriver from "@/assets/team-driver.jpg";
-import testimonial1 from "@/assets/testimonial-1.jpg";
-import testimonial2 from "@/assets/testimonial-2.jpg";
-import testimonial3 from "@/assets/testimonial-3.jpg";
+import { findShipment } from "@/lib/shipments";
 import tierOcean from "@/assets/tier-ocean.jpg";
 import tierAir from "@/assets/tier-air.jpg";
 import tierGround from "@/assets/tier-ground.jpg";
 
+// Real-photo placeholders (Unsplash). Replaced AI-generated portraits with
+// authentic photography of logistics staff, couriers, and customer support.
+const heroCourier = "https://images.unsplash.com/photo-1601924582971-df8b7e97b1c8?auto=format&fit=crop&w=1200&q=80";
+const teamSupport = "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=900&q=80";
+const teamWarehouse = "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=900&q=80";
+const teamDriver = "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?auto=format&fit=crop&w=900&q=80";
+const testimonial1 = "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80";
+const testimonial2 = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80";
+const testimonial3 = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -53,9 +56,21 @@ function HomePage() {
 
   function handleTrack(e: React.FormEvent) {
     e.preventDefault();
-    const id = tracking.trim() || "TRAX123";
-    toast.success("Locating your shipment…", { description: `Opening live tracking for ${id.toUpperCase()}` });
-    navigate({ to: "/tracking", search: { id } });
+    const id = tracking.trim();
+    if (!id) {
+      toast.error("Enter a tracking number", { description: "Type your TranSec tracking ID to continue." });
+      return;
+    }
+    const found = findShipment(id);
+    if (!found) {
+      toast.error("Tracking ID not recognized", {
+        description: "Please verify your number or contact support.",
+      });
+      navigate({ to: "/tracking", search: { id } });
+      return;
+    }
+    toast.success("Locating your shipment…", { description: `Opening live tracking for ${found.id}` });
+    navigate({ to: "/tracking", search: { id: found.id } });
   }
 
   function handleQuote(e: React.FormEvent) {

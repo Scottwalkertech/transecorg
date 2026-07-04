@@ -1,3 +1,5 @@
+import { toShipment, type AdminShipment } from "./admin-shipments";
+
 export type ShipmentStage = 0 | 1 | 2 | 3;
 
 export type HistoryEvent = {
@@ -112,11 +114,29 @@ const SHIPMENTS: Record<string, Shipment> = {
 export const DEMO_TRACKING_IDS = ["TRAX123", "TRAX456", "TRAX789"] as const;
 
 export function getShipment(id: string): Shipment {
+  const found = findShipment(id);
+  if (found) return found;
+  return { ...SHIPMENTS["TRAX456"], id: id.trim() || "TRAX456" };
+}
+
+/**
+ * Strict lookup: returns the shipment if it exists in the built-in demo set
+ * or in the admin-created store, otherwise returns null. Used by the public
+ * tracking search to reject unregistered tracking numbers.
+ */
+export function findShipment(id: string): Shipment | null {
   const key = id.trim().toUpperCase();
+  if (!key) return null;
   if (SHIPMENTS[key]) return SHIPMENTS[key];
-  // Fallback: synthesize an "In Transit" shipment for unknown IDs so the UI still works
-  return {
-    ...SHIPMENTS["TRAX456"],
-    id: id.trim() || "TRAX456",
-  };
+  if (typeof window !== "undefined") {
+    try {
+      const raw = window.localStorage.getItem("transec.admin.shipments");
+      if (raw) {
+        const list = JSON.parse(raw) as AdminShipment[];
+        const match = list.find(s => s.id.toUpperCase() === key);
+        if (match) return toShipment(match);
+      }
+    } catch { /* ignore */ }
+  }
+  return null;
 }
