@@ -47,30 +47,37 @@ const STAGES = [
 function TrackingPage() {
   const { id } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const shipment = useMemo(() => getShipment(id), [id]);
+
+  // Subscribe to admin-shipment mutations so tracking re-resolves live
+  const [tick, setTick] = useState(0);
+  useEffect(() => subscribeAdminShipments(() => setTick(t => t + 1)), []);
+
+  const shipment = useMemo(() => findShipment(id), [id, tick]);
   const [input, setInput] = useState(id);
-  const [progress, setProgress] = useState(shipment.progress);
+  const [progress, setProgress] = useState(shipment?.progress ?? 0);
   const [historyOpen, setHistoryOpen] = useState(true);
 
-  // Reset progress when shipment changes
   useEffect(() => {
-    setInput(shipment.id);
-    setProgress(shipment.progress);
-  }, [shipment.id, shipment.progress]);
+    setInput(id);
+    setProgress(shipment?.progress ?? 0);
+  }, [id, shipment?.id, shipment?.progress]);
 
-  // Mock live updating — only for in-transit shipments
   useEffect(() => {
-    if (!shipment.live) return;
+    if (!shipment?.live) return;
     const base = shipment.progress;
     const ceiling = Math.min(base + 10, 94);
     const t = setInterval(() => {
-      setProgress(p => {
+      setProgress((p: number) => {
         const next = p + Math.random() * 0.6;
         return next > ceiling ? base : next;
       });
     }, 1800);
     return () => clearInterval(t);
-  }, [shipment.live, shipment.progress]);
+  }, [shipment?.live, shipment?.progress]);
+
+  if (!shipment) {
+    return <NotFoundView id={id} input={input} setInput={setInput} onSubmit={(v) => navigate({ search: { id: v } })} />;
+  }
 
   const currentStage = shipment.stage;
   const isDelivered = shipment.stage === 3;
