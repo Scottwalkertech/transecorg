@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X, LayoutDashboard } from "lucide-react";
+import { Package, Menu, X, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
 
