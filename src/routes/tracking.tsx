@@ -76,7 +76,7 @@ function TrackingPage() {
   }, [shipment?.live, shipment?.progress]);
 
   if (!shipment) {
-    return <NotFoundView id={id} input={input} setInput={setInput} onSubmit={(v) => navigate({ search: { id: v } })} />;
+    return <NotFoundView id={id} input={input} setInput={setInput} onSubmit={(v: string) => navigate({ search: { id: v } })} />;
   }
 
   const currentStage = shipment.stage;
