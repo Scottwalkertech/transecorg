@@ -132,14 +132,9 @@ export function findShipment(id: string): Shipment | null {
     try {
       const raw = window.localStorage.getItem("transec.admin.shipments");
       if (raw) {
-        const list = JSON.parse(raw) as Array<{ id: string }>;
+        const list = JSON.parse(raw) as AdminShipment[];
         const match = list.find(s => s.id.toUpperCase() === key);
-        if (match) {
-          // Lazy import to avoid a circular dep at module load
-          // eslint-disable-next-line @typescript-eslint/no-require-imports
-          const { toShipment } = require("./admin-shipments") as typeof import("./admin-shipments");
-          return toShipment(match as import("./admin-shipments").AdminShipment);
-        }
+        if (match) return toShipment(match);
       }
     } catch { /* ignore */ }
   }
