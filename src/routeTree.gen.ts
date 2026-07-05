@@ -22,6 +22,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalDashboardRouteImport } from './routes/portal.dashboard'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const WarehousingRoute = WarehousingRouteImport.update({
   id: '/warehousing',
@@ -88,11 +89,16 @@ const PortalDashboardRoute = PortalDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => PortalRoute,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/air-cargo': typeof AirCargoRoute
   '/careers': typeof CareersRoute
   '/ground-logistics': typeof GroundLogisticsRoute
@@ -102,12 +108,13 @@ export interface FileRoutesByFullPath {
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/admin/login': typeof AdminLoginRoute
   '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/air-cargo': typeof AirCargoRoute
   '/careers': typeof CareersRoute
   '/ground-logistics': typeof GroundLogisticsRoute
@@ -117,13 +124,14 @@ export interface FileRoutesByTo {
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/admin/login': typeof AdminLoginRoute
   '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/air-cargo': typeof AirCargoRoute
   '/careers': typeof CareersRoute
   '/ground-logistics': typeof GroundLogisticsRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/press': typeof PressRoute
   '/tracking': typeof TrackingRoute
   '/warehousing': typeof WarehousingRoute
+  '/admin/login': typeof AdminLoginRoute
   '/portal/dashboard': typeof PortalDashboardRoute
 }
 export interface FileRouteTypes {
@@ -150,6 +159,7 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/admin/login'
     | '/portal/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/admin/login'
     | '/portal/dashboard'
   id:
     | '__root__'
@@ -180,13 +191,14 @@ export interface FileRouteTypes {
     | '/press'
     | '/tracking'
     | '/warehousing'
+    | '/admin/login'
     | '/portal/dashboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AirCargoRoute: typeof AirCargoRoute
   CareersRoute: typeof CareersRoute
   GroundLogisticsRoute: typeof GroundLogisticsRoute
@@ -291,8 +303,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalDashboardRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface PortalRouteChildren {
   PortalDashboardRoute: typeof PortalDashboardRoute
@@ -308,7 +337,7 @@ const PortalRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AirCargoRoute: AirCargoRoute,
   CareersRoute: CareersRoute,
   GroundLogisticsRoute: GroundLogisticsRoute,
