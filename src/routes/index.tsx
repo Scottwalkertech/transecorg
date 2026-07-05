@@ -94,90 +94,48 @@ function HomePage() {
       <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
         <div className="absolute inset-0 grid-bg opacity-50" aria-hidden />
         <div className="absolute -right-32 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-secondary/20 blur-3xl" aria-hidden />
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-          <div className="grid items-center gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary">
-                <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
-                Trusted by 12,000+ enterprises
-              </span>
-              <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-                Move the world,<br />
-                <span className="text-secondary">securely & on time.</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-base text-primary-foreground/75 sm:text-lg">
-                Global freight, air cargo and ground delivery — with real-time GPS tracking, customs clearance, and 24/7 operations support.
-              </p>
+        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary">
+            <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
+            Trusted by 12,000+ enterprises
+          </span>
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+            Move the world,<br />
+            <span className="text-secondary">securely & on time.</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-base text-primary-foreground/75 sm:text-lg">
+            Global freight, air cargo and ground delivery — with real-time GPS tracking, customs clearance, and 24/7 operations support.
+          </p>
 
-              {/* Track form */}
-              <form
-                onSubmit={handleTrack}
-                className="mt-8 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-primary-foreground/15 bg-background/95 p-2 shadow-elegant sm:flex sm:flex-row"
-              >
-                <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
-                  <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  <input
-                    value={tracking}
-                    onChange={e => setTracking(e.target.value)}
-                    placeholder="Enter tracking number (try TRAX123, TRAX456, TRAX789)"
-                    className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-gradient-orange px-5 py-2.5 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
-                >
-                  Track <ArrowRight className="h-4 w-4" />
-                </button>
-              </form>
-
-              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-primary-foreground/70">
-                <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" /> ISO 27001 Secure</span>
-                <span className="flex items-center gap-1.5"><Globe2 className="h-4 w-4 text-secondary" /> 220+ Countries</span>
-                <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> 24/7 Live Support</span>
-              </div>
+          {/* Track form */}
+          <form
+            onSubmit={handleTrack}
+            className="mx-auto mt-8 grid max-w-2xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-primary-foreground/15 bg-background/95 p-2 text-left shadow-elegant sm:flex sm:flex-row"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
+              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <input
+                value={tracking}
+                onChange={e => setTracking(e.target.value)}
+                placeholder="Enter your tracking number"
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+              />
             </div>
+            <button
+              type="submit"
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-gradient-orange px-5 py-2.5 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform hover:scale-[1.02]"
+            >
+              Track <ArrowRight className="h-4 w-4" />
+            </button>
+          </form>
 
-            {/* Visual: courier photo with floating tracking card */}
-            <div className="lg:col-span-5">
-              <div className="relative">
-                <div className="relative overflow-hidden rounded-3xl border border-primary-foreground/15 shadow-elegant">
-                  <img
-                    src={heroCourier}
-                    alt="Smiling TranSec logistics professional holding a tablet in a warehouse"
-                    width={1024}
-                    height={1280}
-                    className="h-[520px] w-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
-                </div>
-                <div className="absolute -bottom-6 -left-4 w-[88%] rounded-2xl border border-border bg-background/95 p-5 shadow-elegant backdrop-blur sm:-left-6 sm:w-[86%]">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="rounded-full bg-success/15 px-2.5 py-1 font-semibold uppercase tracking-wider text-success">Live</span>
-                    <span className="text-muted-foreground">TRAX123</span>
-                  </div>
-                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Origin</p>
-                      <p className="mt-1 font-semibold text-foreground">Rotterdam, NL</p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Destination</p>
-                      <p className="mt-1 font-semibold text-foreground">New York, US</p>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <div className="flex justify-between text-[11px] uppercase tracking-wider text-muted-foreground">
-                      <span>In transit</span><span>72%</span>
-                    </div>
-                    <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-                      <div className="h-full w-[72%] rounded-full bg-gradient-orange" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-primary-foreground/70">
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" /> ISO 27001 Secure</span>
+            <span className="flex items-center gap-1.5"><Globe2 className="h-4 w-4 text-secondary" /> 220+ Countries</span>
+            <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> 24/7 Live Support</span>
           </div>
+        </div>
+
         </div>
       </section>
 
