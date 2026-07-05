@@ -18,6 +18,7 @@ import { Route as NetworkRouteImport } from './routes/network'
 import { Route as GroundLogisticsRouteImport } from './routes/ground-logistics'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AirCargoRouteImport } from './routes/air-cargo'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -69,6 +70,11 @@ const AirCargoRoute = AirCargoRouteImport.update({
   path: '/air-cargo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -80,9 +86,9 @@ const IndexRoute = IndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const PortalDashboardRoute = PortalDashboardRouteImport.update({
   id: '/dashboard',
@@ -90,14 +96,15 @@ const PortalDashboardRoute = PortalDashboardRouteImport.update({
   getParentRoute: () => PortalRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/air-cargo': typeof AirCargoRoute
   '/careers': typeof CareersRoute
   '/ground-logistics': typeof GroundLogisticsRoute
@@ -131,6 +138,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/air-cargo': typeof AirCargoRoute
   '/careers': typeof CareersRoute
   '/ground-logistics': typeof GroundLogisticsRoute
@@ -149,6 +157,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/air-cargo'
     | '/careers'
     | '/ground-logistics'
@@ -181,6 +190,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/air-cargo'
     | '/careers'
     | '/ground-logistics'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AirCargoRoute: typeof AirCargoRoute
   CareersRoute: typeof CareersRoute
   GroundLogisticsRoute: typeof GroundLogisticsRoute
@@ -207,8 +218,6 @@ export interface RootRouteChildren {
   PressRoute: typeof PressRoute
   TrackingRoute: typeof TrackingRoute
   WarehousingRoute: typeof WarehousingRoute
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -276,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AirCargoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -292,10 +308,10 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/portal/dashboard': {
       id: '/portal/dashboard'
@@ -306,13 +322,25 @@ declare module '@tanstack/react-router' {
     }
     '/admin/login': {
       id: '/admin/login'
-      path: '/admin/login'
+      path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
   }
 }
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface PortalRouteChildren {
   PortalDashboardRoute: typeof PortalDashboardRoute
@@ -328,6 +356,7 @@ const PortalRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   AirCargoRoute: AirCargoRoute,
   CareersRoute: CareersRoute,
   GroundLogisticsRoute: GroundLogisticsRoute,
@@ -337,8 +366,6 @@ const rootRouteChildren: RootRouteChildren = {
   PressRoute: PressRoute,
   TrackingRoute: TrackingRoute,
   WarehousingRoute: WarehousingRoute,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
