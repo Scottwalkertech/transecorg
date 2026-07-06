@@ -18,9 +18,10 @@ function OceanFreightPage() {
   return (
     <PageShell
       eyebrow="Ocean Freight"
-      title="Reliable international sea shipping at enterprise scale"
-      description="From single pallets to full container loads, TranSec moves cargo across every major trade lane with transparent rates and real-time visibility."
+      title="Global Ocean Freight"
+      description="Reliable and efficient international sea cargo routing solutions."
       icon={Ship}
+      image="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=2400&q=80"
     >
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-card">

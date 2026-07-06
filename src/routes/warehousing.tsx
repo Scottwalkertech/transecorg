@@ -25,9 +25,11 @@ function WarehousingPage() {
   return (
     <PageShell
       eyebrow="Warehousing"
-      title="Secure, climate-controlled storage and fulfillment"
-      description="From bulk pallet storage to direct-to-consumer fulfillment, TranSec runs a network of bonded, 24/7-monitored facilities."
+      title="Smart Storage & Warehousing"
+      description="Highly automated inventory management, fulfillment, and distribution hubs."
       icon={Warehouse}
+      image="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=2400&q=80"
+    >
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(s => (
