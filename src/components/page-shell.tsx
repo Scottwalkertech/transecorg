@@ -15,7 +15,7 @@ export function PageHeader({
 }) {
   return (
     <section className="relative isolate overflow-hidden">
-      <div className="relative h-[360px] w-full sm:h-[400px] lg:aspect-[3/1] lg:h-auto">
+      <div className="relative aspect-[16/9] w-full sm:aspect-[2/1] md:aspect-[3/1]">
         <img
           src={image}
           alt=""
@@ -23,10 +23,10 @@ export function PageHeader({
           className="absolute inset-0 h-full w-full object-cover"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-slate-900/55 backdrop-brightness-90" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-transparent" />
-        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 py-10 text-white sm:px-6 sm:py-14 lg:px-8 lg:py-16">
-          <nav className="mb-4 flex items-center gap-1.5 text-xs text-white/75">
+        <div className="absolute inset-0 bg-slate-900/60 backdrop-brightness-[0.85]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/40 to-transparent" />
+        <div className="relative mx-auto flex h-full max-w-7xl flex-col justify-end px-4 py-8 text-white sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+          <nav className="mb-3 flex items-center gap-1.5 text-xs text-white/75 sm:mb-4">
             <Link to="/" className="hover:text-secondary">Home</Link>
             <ChevronRight className="h-3.5 w-3.5" />
             <span className="text-white/90">{eyebrow}</span>
@@ -34,10 +34,10 @@ export function PageHeader({
           <span className="inline-flex w-fit items-center rounded-full border border-secondary/50 bg-secondary/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-secondary backdrop-blur">
             {eyebrow}
           </span>
-          <h1 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-tight drop-shadow-md sm:text-5xl">
+          <h1 className="mt-3 max-w-3xl font-display text-3xl font-bold leading-tight drop-shadow-md sm:mt-4 sm:text-4xl lg:text-5xl">
             {title}
           </h1>
-          <p className="mt-3 max-w-2xl text-base text-white/85 sm:text-lg">{description}</p>
+          <p className="mt-2 max-w-2xl text-sm text-white/85 sm:mt-3 sm:text-base lg:text-lg">{description}</p>
         </div>
       </div>
     </section>
