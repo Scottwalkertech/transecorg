@@ -30,7 +30,6 @@ function WarehousingPage() {
       icon={Warehouse}
       image="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=2400&q=80"
     >
-    >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(s => (
           <div key={s.label} className="rounded-xl border border-border bg-card p-6 text-center shadow-card">
