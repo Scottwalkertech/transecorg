@@ -24,9 +24,10 @@ function AirCargoPage() {
   return (
     <PageShell
       eyebrow="Air Cargo"
-      title="When time is the currency, fly TranSec"
-      description="Door-to-door global air freight engineered for perishables, electronics, pharma, and any cargo where every hour counts."
+      title="Express Air Cargo"
+      description="Time-critical air freight logistics with global reach and fast clearance."
       icon={Plane}
+      image="https://images.unsplash.com/photo-1583445095369-9c651e7e5d34?auto=format&fit=crop&w=2400&q=80"
     >
       <h2 className="font-display text-2xl font-bold text-foreground">Transit options</h2>
       <p className="mt-2 text-sm text-muted-foreground">Choose the speed tier that matches your cost-vs-urgency profile.</p>

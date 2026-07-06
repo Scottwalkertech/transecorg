@@ -18,9 +18,10 @@ function GroundPage() {
   return (
     <PageShell
       eyebrow="Ground Logistics"
-      title="A nationwide trucking network, orchestrated as one"
-      description="From parcel to full truckload, TranSec connects 12,000+ vetted carriers behind a single API and a single bill of lading."
+      title="Ground Freight Transport"
+      description="Comprehensive continental trucking networks and final-mile delivery options."
       icon={Truck}
+      image="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=2400&q=80"
     >
       <div className="grid gap-6 md:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-7 shadow-card">
