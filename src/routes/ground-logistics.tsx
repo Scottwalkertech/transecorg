@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Truck, MapPin, Route as RouteIcon, Boxes, Clock, ShieldCheck } from "lucide-react";
 import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/ground-logistics")({
   head: () => ({
