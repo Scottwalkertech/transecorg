@@ -3,13 +3,7 @@ import { Package, Mail, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-
-const SERVICES = [
-  { to: "/ocean-freight", label: "Ocean Freight" },
-  { to: "/air-cargo", label: "Air Cargo" },
-  { to: "/ground-logistics", label: "Ground Logistics" },
-  { to: "/warehousing", label: "Warehousing" },
-] as const;
+import { useServices, SERVICE_ROUTE } from "@/lib/services";
 
 const COMPANY = [
   { to: "/about", label: "About" },
