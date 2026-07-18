@@ -1,9 +1,13 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X, LayoutDashboard } from "lucide-react";
+import { Package, Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
+import { useServices, SERVICE_ROUTE } from "@/lib/services";
 
 export function SiteHeader() {
+  const [open, setOpen] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const { services } = useServices();
   const [open, setOpen] = useState(false);
   const [session, setSession] = useState<MockSession | null>(null);
   useEffect(() => {
