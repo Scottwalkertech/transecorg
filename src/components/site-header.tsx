@@ -8,7 +8,6 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const { services } = useServices();
-  const [open, setOpen] = useState(false);
   const [session, setSession] = useState<MockSession | null>(null);
   useEffect(() => {
     const sync = () => setSession(getSession());
