@@ -16,13 +16,16 @@ export const Route = createFileRoute("/ocean-freight")({
 });
 
 function OceanFreightPage() {
+  const { service } = useService("ocean-freight");
   return (
     <PageShell
       eyebrow="Ocean Freight"
-      title="Global Ocean Freight"
-      description="Reliable and efficient international sea cargo routing solutions."
+      title={service?.title ?? "Global Ocean Freight"}
+      description={service?.description ?? "Reliable and efficient international sea cargo routing solutions."}
       icon={Ship}
-      image="https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=2400&q=80"
+      image={service?.image_url && service.image_url.startsWith("http") && service.image_url !== "https://unsplash.com"
+        ? service.image_url
+        : "https://images.unsplash.com/photo-1494412651409-8963ce7935a7?auto=format&fit=crop&w=2400&q=80"}
     >
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-card">
