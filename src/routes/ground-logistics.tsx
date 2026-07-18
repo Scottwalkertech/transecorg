@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Truck, MapPin, Route as RouteIcon, Boxes, Clock, ShieldCheck } from "lucide-react";
 import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/ground-logistics")({
   head: () => ({
@@ -15,13 +16,16 @@ export const Route = createFileRoute("/ground-logistics")({
 });
 
 function GroundPage() {
+  const { service } = useService("ground-logistics");
   return (
     <PageShell
       eyebrow="Ground Logistics"
-      title="Ground Freight Transport"
-      description="Comprehensive continental trucking networks and final-mile delivery options."
+      title={service?.title ?? "Ground Freight Transport"}
+      description={service?.description ?? "Comprehensive continental trucking networks and final-mile delivery options."}
       icon={Truck}
-      image="https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=2400&q=80"
+      image={service?.image_url && service.image_url.startsWith("http") && service.image_url !== "https://unsplash.com"
+        ? service.image_url
+        : "https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=2400&q=80"}
     >
       <div className="grid gap-6 md:grid-cols-3">
         <div className="rounded-2xl border border-border bg-card p-7 shadow-card">

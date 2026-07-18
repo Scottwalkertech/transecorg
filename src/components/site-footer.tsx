@@ -3,13 +3,7 @@ import { Package, Mail, ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-
-const SERVICES = [
-  { to: "/ocean-freight", label: "Ocean Freight" },
-  { to: "/air-cargo", label: "Air Cargo" },
-  { to: "/ground-logistics", label: "Ground Logistics" },
-  { to: "/warehousing", label: "Warehousing" },
-] as const;
+import { useServices, SERVICE_ROUTE } from "@/lib/services";
 
 const COMPANY = [
   { to: "/about", label: "About" },
@@ -23,6 +17,7 @@ const emailSchema = z.string().trim().email("Enter a valid email address").max(2
 
 export function SiteFooter() {
   const [email, setEmail] = useState("");
+  const { services } = useServices();
 
   function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
@@ -90,11 +85,18 @@ export function SiteFooter() {
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary">Services</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/75">
-            {SERVICES.map(s => (
-              <li key={s.to}>
-                <Link to={s.to} className="transition-colors hover:text-secondary">{s.label}</Link>
-              </li>
-            ))}
+            {(services ?? []).map(s => {
+              const to = SERVICE_ROUTE[s.slug];
+              return (
+                <li key={s.id}>
+                  {to ? (
+                    <Link to={to} className="transition-colors hover:text-secondary">{s.title}</Link>
+                  ) : (
+                    <span className="text-primary-foreground/60">{s.title}</span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div>

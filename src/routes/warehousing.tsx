@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Warehouse, Boxes, Thermometer, ShieldCheck, BarChart3, Zap } from "lucide-react";
 import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/warehousing")({
   head: () => ({
@@ -22,13 +23,16 @@ const stats = [
 ];
 
 function WarehousingPage() {
+  const { service } = useService("warehousing");
   return (
     <PageShell
       eyebrow="Warehousing"
-      title="Smart Storage & Warehousing"
-      description="Highly automated inventory management, fulfillment, and distribution hubs."
+      title={service?.title ?? "Smart Storage & Warehousing"}
+      description={service?.description ?? "Highly automated inventory management, fulfillment, and distribution hubs."}
       icon={Warehouse}
-      image="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=2400&q=80"
+      image={service?.image_url && service.image_url.startsWith("http") && service.image_url !== "https://unsplash.com"
+        ? service.image_url
+        : "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=2400&q=80"}
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map(s => (
