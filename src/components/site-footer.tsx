@@ -17,6 +17,7 @@ const emailSchema = z.string().trim().email("Enter a valid email address").max(2
 
 export function SiteFooter() {
   const [email, setEmail] = useState("");
+  const { services } = useServices();
 
   function handleSubscribe(e: React.FormEvent) {
     e.preventDefault();
