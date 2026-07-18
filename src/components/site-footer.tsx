@@ -85,11 +85,18 @@ export function SiteFooter() {
         <div>
           <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary">Services</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/75">
-            {SERVICES.map(s => (
-              <li key={s.to}>
-                <Link to={s.to} className="transition-colors hover:text-secondary">{s.label}</Link>
-              </li>
-            ))}
+            {(services ?? []).map(s => {
+              const to = SERVICE_ROUTE[s.slug];
+              return (
+                <li key={s.id}>
+                  {to ? (
+                    <Link to={to} className="transition-colors hover:text-secondary">{s.title}</Link>
+                  ) : (
+                    <span className="text-primary-foreground/60">{s.title}</span>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div>
