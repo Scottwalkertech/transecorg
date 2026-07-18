@@ -127,6 +127,22 @@ export function SiteHeader() {
                 {n.label}
               </a>
             ))}
+            <div className="mt-1 border-t border-border pt-2">
+              <span className="px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Services</span>
+              {(services ?? []).map(s => {
+                const to = SERVICE_ROUTE[s.slug];
+                return to ? (
+                  <Link
+                    key={s.id}
+                    to={to}
+                    onClick={() => setOpen(false)}
+                    className="block rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-muted"
+                  >
+                    {s.title}
+                  </Link>
+                ) : null;
+              })}
+            </div>
             <a
               href="/#quote"
               onClick={() => setOpen(false)}
