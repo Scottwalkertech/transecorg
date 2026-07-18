@@ -45,9 +45,37 @@ export function SiteHeader() {
           <Link to="/tracking" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground">
             Track Shipment
           </Link>
-          <a href="/#services" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground">
-            Services
-          </a>
+          <div
+            className="relative"
+            onMouseEnter={() => setServicesOpen(true)}
+            onMouseLeave={() => setServicesOpen(false)}
+          >
+            <button
+              type="button"
+              onClick={() => setServicesOpen(v => !v)}
+              className="inline-flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
+            >
+              Services <ChevronDown className="h-3.5 w-3.5" />
+            </button>
+            {servicesOpen && (
+              <div className="absolute left-0 top-full z-50 w-64 rounded-lg border border-border bg-popover p-1.5 shadow-elegant">
+                {(services ?? []).map(s => {
+                  const to = SERVICE_ROUTE[s.slug];
+                  const cls = "block rounded-md px-3 py-2 text-sm text-foreground/85 hover:bg-muted";
+                  return to ? (
+                    <Link key={s.id} to={to} className={cls} onClick={() => setServicesOpen(false)}>
+                      {s.title}
+                    </Link>
+                  ) : (
+                    <span key={s.id} className="block rounded-md px-3 py-2 text-sm text-muted-foreground">{s.title}</span>
+                  );
+                })}
+                {services && services.length === 0 && (
+                  <span className="block px-3 py-2 text-xs text-muted-foreground">No services published</span>
+                )}
+              </div>
+            )}
+          </div>
           <a href="/#quote" className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground">
             Get a Quote
           </a>
