@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Warehouse, Boxes, Thermometer, ShieldCheck, BarChart3, Zap } from "lucide-react";
 import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/warehousing")({
   head: () => ({
