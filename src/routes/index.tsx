@@ -15,7 +15,7 @@ import {
   Quote,
   Star,
 } from "lucide-react";
-import { findShipment } from "@/lib/shipments";
+import { fetchTrackingByNumber } from "@/lib/tracking-db";
 import tierOcean from "@/assets/tier-ocean.jpg";
 import tierAir from "@/assets/tier-air.jpg";
 import tierGround from "@/assets/tier-ground.jpg";
@@ -378,7 +378,7 @@ function HomePage() {
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   to="/tracking"
-                  search={{ id: "TRAX123" }}
+                  search={{ id: "" }}
                   className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/25 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
                   Track a shipment <ArrowRight className="h-4 w-4" />
