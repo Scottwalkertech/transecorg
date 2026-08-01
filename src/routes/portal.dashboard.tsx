@@ -6,7 +6,8 @@ import {
   MapPin, Clock, CheckCircle2, Truck, Plane, Ship, ShieldCheck, TrendingUp,
 } from "lucide-react";
 import { getSession, clearSession, useSessionSync, type MockSession } from "@/lib/mock-session";
-import { DEMO_TRACKING_IDS, getShipment, type Shipment } from "@/lib/shipments";
+import { type Shipment } from "@/lib/shipments";
+import { rowToShipment, useTrackingRows } from "@/lib/tracking-db";
 
 export const Route = createFileRoute("/portal/dashboard")({
   head: () => ({
@@ -23,6 +24,7 @@ function DashboardPage() {
   const navigate = useNavigate();
   const [session, setSession] = useState<MockSession | null>(null);
   const [ready, setReady] = useState(false);
+  const { rows } = useTrackingRows();
 
   useEffect(() => {
     const sync = () => setSession(getSession());
@@ -37,7 +39,7 @@ function DashboardPage() {
 
   if (!session) return null;
 
-  const shipments: Shipment[] = DEMO_TRACKING_IDS.map(id => getShipment(id));
+  const shipments: Shipment[] = rows.slice(0, 6).map(rowToShipment);
   const inTransit = shipments.filter(s => s.stage === 1 || s.stage === 2).length;
   const delivered = shipments.filter(s => s.stage === 3).length;
 
