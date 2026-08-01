@@ -48,11 +48,8 @@ function TrackingPage() {
   const { id } = Route.useSearch();
   const navigate = Route.useNavigate();
 
-  // Subscribe to admin-shipment mutations so tracking re-resolves live
-  const [tick, setTick] = useState(0);
-  useEffect(() => subscribeAdminShipments(() => setTick(t => t + 1)), []);
-
-  const shipment = useMemo(() => findShipment(id), [id, tick]);
+  // Live query against the tracking database (realtime-subscribed)
+  const { shipment, loading } = useTrackedShipment(id);
   const [input, setInput] = useState(id);
   const [progress, setProgress] = useState(shipment?.progress ?? 0);
   const [historyOpen, setHistoryOpen] = useState(true);
@@ -75,9 +72,18 @@ function TrackingPage() {
     return () => clearInterval(t);
   }, [shipment?.live, shipment?.progress]);
 
+  if (loading && id) {
+    return (
+      <div className="grid min-h-[60vh] place-items-center text-sm text-muted-foreground">
+        Looking up shipment {id}…
+      </div>
+    );
+  }
+
   if (!shipment) {
     return <NotFoundView id={id} input={input} setInput={setInput} onSubmit={(v: string) => navigate({ search: { id: v } })} />;
   }
+
 
   const currentStage = shipment.stage;
   const isDelivered = shipment.stage === 3;
