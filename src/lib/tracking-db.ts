@@ -169,7 +169,7 @@ export async function deleteTrackingRow(id: string): Promise<void> {
 function useRealtime(onChange: () => void) {
   useEffect(() => {
     const channel = supabase
-      .channel(`public:${TRACKING_TABLE}`)
+      .channel(`public:${TRACKING_TABLE}:${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: TRACKING_TABLE }, () => onChange())
       .subscribe();
     return () => {
