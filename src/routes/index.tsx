@@ -54,24 +54,25 @@ function HomePage() {
   const [tracking, setTracking] = useState("");
   const [quote, setQuote] = useState({ from: "", to: "", weight: "", email: "" });
 
-  function handleTrack(e: React.FormEvent) {
+  async function handleTrack(e: React.FormEvent) {
     e.preventDefault();
     const id = tracking.trim();
     if (!id) {
       toast.error("Enter a tracking number", { description: "Type your TranSec tracking ID to continue." });
       return;
     }
-    const found = findShipment(id);
-    if (!found) {
+    const row = await fetchTrackingByNumber(id);
+    if (!row) {
       toast.error("Tracking ID not recognized", {
         description: "Please verify your number or contact support.",
       });
       navigate({ to: "/tracking", search: { id } });
       return;
     }
-    toast.success("Locating your shipment…", { description: `Opening live tracking for ${found.id}` });
-    navigate({ to: "/tracking", search: { id: found.id } });
+    toast.success("Locating your shipment…", { description: `Opening live tracking for ${row.tracking_number}` });
+    navigate({ to: "/tracking", search: { id: row.tracking_number } });
   }
+
 
   function handleQuote(e: React.FormEvent) {
     e.preventDefault();
