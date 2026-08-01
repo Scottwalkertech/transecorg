@@ -51,7 +51,7 @@ export function useServices() {
       .catch(e => { if (!cancelled) setError(e as Error); });
 
     const channel = supabase
-      .channel(CHANNEL)
+      .channel(`${CHANNEL}:${Math.random().toString(36).slice(2)}`)
       .on("postgres_changes", { event: "*", schema: "public", table: TABLE }, () => {
         fetchAll()
           .then(rows => { if (!cancelled) setServices(rows); })

@@ -15,7 +15,7 @@ import {
   Quote,
   Star,
 } from "lucide-react";
-import { findShipment } from "@/lib/shipments";
+import { fetchTrackingByNumber } from "@/lib/tracking-db";
 import tierOcean from "@/assets/tier-ocean.jpg";
 import tierAir from "@/assets/tier-air.jpg";
 import tierGround from "@/assets/tier-ground.jpg";
@@ -54,24 +54,25 @@ function HomePage() {
   const [tracking, setTracking] = useState("");
   const [quote, setQuote] = useState({ from: "", to: "", weight: "", email: "" });
 
-  function handleTrack(e: React.FormEvent) {
+  async function handleTrack(e: React.FormEvent) {
     e.preventDefault();
     const id = tracking.trim();
     if (!id) {
       toast.error("Enter a tracking number", { description: "Type your TranSec tracking ID to continue." });
       return;
     }
-    const found = findShipment(id);
-    if (!found) {
+    const row = await fetchTrackingByNumber(id);
+    if (!row) {
       toast.error("Tracking ID not recognized", {
         description: "Please verify your number or contact support.",
       });
       navigate({ to: "/tracking", search: { id } });
       return;
     }
-    toast.success("Locating your shipment…", { description: `Opening live tracking for ${found.id}` });
-    navigate({ to: "/tracking", search: { id: found.id } });
+    toast.success("Locating your shipment…", { description: `Opening live tracking for ${row.tracking_number}` });
+    navigate({ to: "/tracking", search: { id: row.tracking_number } });
   }
+
 
   function handleQuote(e: React.FormEvent) {
     e.preventDefault();
@@ -377,7 +378,7 @@ function HomePage() {
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   to="/tracking"
-                  search={{ id: "TRAX123" }}
+                  search={{ id: "" }}
                   className="inline-flex items-center gap-2 rounded-lg border border-primary-foreground/25 bg-primary-foreground/5 px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary-foreground/10"
                 >
                   Track a shipment <ArrowRight className="h-4 w-4" />

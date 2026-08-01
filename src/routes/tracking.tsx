@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import {
   Package,
@@ -17,8 +17,8 @@ import {
   RefreshCw,
   AlertTriangle,
 } from "lucide-react";
-import { findShipment } from "@/lib/shipments";
-import { subscribeAdminShipments } from "@/lib/admin-shipments";
+import { useTrackedShipment } from "@/lib/tracking-db";
+
 
 const searchSchema = z.object({
   id: z.string().optional().default(""),
@@ -48,11 +48,8 @@ function TrackingPage() {
   const { id } = Route.useSearch();
   const navigate = Route.useNavigate();
 
-  // Subscribe to admin-shipment mutations so tracking re-resolves live
-  const [tick, setTick] = useState(0);
-  useEffect(() => subscribeAdminShipments(() => setTick(t => t + 1)), []);
-
-  const shipment = useMemo(() => findShipment(id), [id, tick]);
+  // Live query against the tracking database (realtime-subscribed)
+  const { shipment, loading } = useTrackedShipment(id);
   const [input, setInput] = useState(id);
   const [progress, setProgress] = useState(shipment?.progress ?? 0);
   const [historyOpen, setHistoryOpen] = useState(true);
@@ -75,9 +72,18 @@ function TrackingPage() {
     return () => clearInterval(t);
   }, [shipment?.live, shipment?.progress]);
 
+  if (loading && id) {
+    return (
+      <div className="grid min-h-[60vh] place-items-center text-sm text-muted-foreground">
+        Looking up shipment {id}…
+      </div>
+    );
+  }
+
   if (!shipment) {
     return <NotFoundView id={id} input={input} setInput={setInput} onSubmit={(v: string) => navigate({ search: { id: v } })} />;
   }
+
 
   const currentStage = shipment.stage;
   const isDelivered = shipment.stage === 3;
@@ -119,7 +125,7 @@ function TrackingPage() {
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Enter tracking number (try TRAX123, TRAX456, TRAX789)"
+                placeholder="Enter your TranSec tracking number"
                 className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
             </div>

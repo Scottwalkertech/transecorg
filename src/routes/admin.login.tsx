@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ShieldCheck, Lock, User, ArrowRight } from "lucide-react";
-import { isAdminAuthed, signInAdmin, ADMIN_USERNAME, ADMIN_PASSWORD } from "@/lib/admin-auth";
+import { ShieldCheck, Lock, Mail, ArrowRight } from "lucide-react";
+import { signInWithEmail, useSupabaseSession } from "@/lib/supabase-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -17,21 +17,27 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLoginPage() {
   const navigate = useNavigate();
-  const [username, setUsername] = useState("");
+  const { user, isAdmin } = useSupabaseSession();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (isAdminAuthed()) navigate({ to: "/admin" });
-  }, [navigate]);
+    if (user && isAdmin) navigate({ to: "/admin" });
+  }, [user, isAdmin, navigate]);
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
-    const ok = signInAdmin(username, password);
+    const { data, error } = await signInWithEmail(email, password);
     setBusy(false);
-    if (!ok) {
-      toast.error("Access denied", { description: "Invalid administrator credentials." });
+    if (error) {
+      toast.error("Access denied", { description: error.message });
+      return;
+    }
+    const meta = { ...(data.user?.app_metadata ?? {}), ...(data.user?.user_metadata ?? {}) } as Record<string, unknown>;
+    if (String(meta["role"] ?? "").toLowerCase() !== "admin") {
+      toast.error("Not an administrator", { description: "This account has no admin role assigned." });
       return;
     }
     toast.success("Welcome, admin", { description: "Redirecting to the operations console." });
@@ -53,9 +59,8 @@ function AdminLoginPage() {
             Internal staff portal for creating, editing, and dispatching shipments across the TranSec global network. Public users should use the tracking page instead.
           </p>
           <div className="mt-6 rounded-xl border border-primary-foreground/15 bg-primary-foreground/5 p-4 text-xs text-primary-foreground/70">
-            <p className="font-semibold uppercase tracking-wider text-secondary">Demo credentials</p>
-            <p className="mt-2 font-mono">username: <span className="text-primary-foreground">{ADMIN_USERNAME}</span></p>
-            <p className="font-mono">password: <span className="text-primary-foreground">{ADMIN_PASSWORD}</span></p>
+            Sign in with your TranSec staff account. Access requires an{" "}
+            <span className="font-mono text-secondary">admin</span> role on the account.
           </div>
         </div>
 
@@ -70,15 +75,16 @@ function AdminLoginPage() {
 
           <label className="mt-6 block">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              <User className="h-3.5 w-3.5" /> Username
+              <Mail className="h-3.5 w-3.5" /> Work email
             </span>
             <input
               required
-              autoComplete="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-              placeholder="admin"
+              placeholder="ops@transec.com"
             />
           </label>
 
