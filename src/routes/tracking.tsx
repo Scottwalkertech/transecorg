@@ -17,8 +17,8 @@ import {
   RefreshCw,
   AlertTriangle,
 } from "lucide-react";
-import { findShipment } from "@/lib/shipments";
-import { subscribeAdminShipments } from "@/lib/admin-shipments";
+import { useTrackedShipment } from "@/lib/tracking-db";
+
 
 const searchSchema = z.object({
   id: z.string().optional().default(""),
