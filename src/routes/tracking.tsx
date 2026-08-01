@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import {
   Package,
@@ -125,7 +125,7 @@ function TrackingPage() {
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Enter tracking number (try TRAX123, TRAX456, TRAX789)"
+                placeholder="Enter your TranSec tracking number"
                 className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
               />
             </div>
