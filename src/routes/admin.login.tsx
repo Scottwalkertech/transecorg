@@ -35,8 +35,7 @@ function AdminLoginPage() {
       toast.error("Access denied", { description: error.message });
       return;
     }
-    const meta = { ...(data.user?.app_metadata ?? {}), ...(data.user?.user_metadata ?? {}) } as Record<string, unknown>;
-    if (String(meta["role"] ?? "").toLowerCase() !== "admin") {
+    if (!isAdminUser(data.user)) {
       toast.error("Not an administrator", { description: "This account has no admin role assigned." });
       return;
     }
