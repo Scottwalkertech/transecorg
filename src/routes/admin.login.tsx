@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ShieldCheck, Lock, Mail, ArrowRight } from "lucide-react";
-import { signInWithEmail, useSupabaseSession } from "@/lib/supabase-auth";
+import { isAdminUser, signInWithEmail, useSupabaseSession } from "@/lib/supabase-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
@@ -35,8 +35,7 @@ function AdminLoginPage() {
       toast.error("Access denied", { description: error.message });
       return;
     }
-    const meta = { ...(data.user?.app_metadata ?? {}), ...(data.user?.user_metadata ?? {}) } as Record<string, unknown>;
-    if (String(meta["role"] ?? "").toLowerCase() !== "admin") {
+    if (!isAdminUser(data.user)) {
       toast.error("Not an administrator", { description: "This account has no admin role assigned." });
       return;
     }
