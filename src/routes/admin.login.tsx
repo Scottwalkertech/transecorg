@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ShieldCheck, Lock, Mail, ArrowRight } from "lucide-react";
-import { signInWithEmail, useSupabaseSession } from "@/lib/supabase-auth";
+import { isAdminUser, signInWithEmail, useSupabaseSession } from "@/lib/supabase-auth";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({
