@@ -3,12 +3,13 @@ import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
- * Reads the admin role from Supabase auth metadata. The database's RLS
- * policies are the real enforcement — this only drives UI affordances.
+ * Reads the admin role from Supabase `app_metadata` only — `user_metadata` is
+ * user-writable and must never grant admin. RLS is the real enforcement; this
+ * only drives UI affordances.
  */
 export function isAdminUser(user: User | null | undefined): boolean {
   if (!user) return false;
-  const meta = { ...(user.app_metadata ?? {}), ...(user.user_metadata ?? {}) } as Record<string, unknown>;
+  const meta = (user.app_metadata ?? {}) as Record<string, unknown>;
   const role = meta["role"] ?? meta["user_role"];
   if (typeof role === "string" && role.toLowerCase() === "admin") return true;
   const roles = meta["roles"];
