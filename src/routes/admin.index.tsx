@@ -33,6 +33,16 @@ import {
   type TrackingStatus,
 } from "@/lib/tracking-db";
 import { signOut, useSupabaseSession } from "@/lib/supabase-auth";
+import {
+  calculateRoute,
+  etaFromMiles,
+  packLocation,
+  toDateInput,
+  usePlaceSuggestions,
+  type GeoPlace,
+  type RouteMeta,
+} from "@/lib/geo";
+
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
