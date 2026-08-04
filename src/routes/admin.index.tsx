@@ -426,10 +426,11 @@ function AdminConsole({ email }: { email: string }) {
 }
 
 function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => void }) {
+  const meta = unpackLocation(row.current_location).meta;
   const [details, setDetails] = useState({
     origin: row.origin,
     destination: row.destination,
-    current_location: row.current_location ?? "",
+    current_location: unpackLocation(row.current_location).label,
     estimated_delivery: row.estimated_delivery?.slice(0, 10) ?? "",
   });
   const [saving, setSaving] = useState(false);
@@ -438,7 +439,7 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
     setDetails({
       origin: row.origin,
       destination: row.destination,
-      current_location: row.current_location ?? "",
+      current_location: unpackLocation(row.current_location).label,
       estimated_delivery: row.estimated_delivery?.slice(0, 10) ?? "",
     });
   }, [row.id, row.updated_at]);
@@ -446,8 +447,12 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
   async function saveDetails() {
     setSaving(true);
     try {
-      await updateTrackingRow(row.id, details);
+      await updateTrackingRow(row.id, {
+        ...details,
+        current_location: packLocation(details.current_location, meta),
+      });
       toast.success("Shipment updated", { description: row.tracking_number });
+
       onSaved();
     } catch (err) {
       toast.error("Update failed", { description: (err as Error).message });
