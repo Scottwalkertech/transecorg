@@ -495,6 +495,67 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
   );
 }
 
+function AddressField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  onSelect,
+  place,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  onSelect: (p: GeoPlace) => void;
+  place: GeoPlace | null;
+}) {
+  const [open, setOpen] = useState(false);
+  const { results, loading } = usePlaceSuggestions(value, open && !place);
+
+  return (
+    <div className="relative">
+      <Field label={label} icon={MapPin}>
+        <input
+          required
+          value={value}
+          onChange={e => { onChange(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder={placeholder}
+          autoComplete="off"
+          className={inputCls}
+        />
+      </Field>
+      {place && (
+        <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-success">
+          <Navigation className="h-3 w-3" /> {place.lat.toFixed(4)}, {place.lon.toFixed(4)}
+        </p>
+      )}
+      {open && !place && (loading || results.length > 0) && (
+        <ul className="absolute z-30 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-border bg-popover p-1 shadow-elegant">
+          {loading && results.length === 0 && (
+            <li className="px-3 py-2 text-xs text-muted-foreground">Searching addresses…</li>
+          )}
+          {results.map(r => (
+            <li key={`${r.lat}-${r.lon}-${r.name}`}>
+              <button
+                type="button"
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => { onSelect(r); setOpen(false); }}
+                className="block w-full rounded-md px-3 py-2 text-left text-xs text-popover-foreground hover:bg-muted"
+              >
+                {r.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+
 const inputCls =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary";
 
