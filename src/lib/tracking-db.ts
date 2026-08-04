@@ -74,11 +74,11 @@ function fmtTs(iso: string): string {
 }
 
 /** Milestone timeline derived from the record's status, origin/destination and location. */
-function buildHistory(row: TrackingRow, status: TrackingStatus): HistoryEvent[] {
+function buildHistory(row: TrackingRow, status: TrackingStatus, locationLabel: string): HistoryEvent[] {
   const stage = STATUS_STAGE[status];
   const created = row.created_at;
   const updated = row.updated_at ?? row.created_at;
-  const here = row.current_location?.trim() || row.origin;
+  const here = locationLabel.trim() || row.origin;
   const events: HistoryEvent[] = [
     { ts: fmtTs(created), loc: row.origin, event: "Shipment label created", stage: 0 },
   ];
@@ -92,6 +92,7 @@ function buildHistory(row: TrackingRow, status: TrackingStatus): HistoryEvent[] 
 export function rowToShipment(row: TrackingRow): Shipment {
   const status = normalizeStatus(row.status);
   const stage = STATUS_STAGE[status];
+  const { label: locationLabel, meta } = unpackLocation(row.current_location);
   const eta = row.estimated_delivery
     ? new Date(row.estimated_delivery).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
     : "Scheduling";
@@ -109,15 +110,19 @@ export function rowToShipment(row: TrackingRow): Shipment {
     service: "TranSec Managed",
     serviceNote: "Network-routed",
     insured: "Standard coverage",
-    transit: "Per network schedule",
-    coords: "—",
+    transit: meta ? `${Math.round(meta.miles / 60 + 8)} h estimated` : "Per network schedule",
+    coords: meta?.dest ? `${meta.dest.lat.toFixed(3)}, ${meta.dest.lon.toFixed(3)}` : "—",
     currentLocation:
-      row.current_location?.trim() ||
+      locationLabel ||
       (stage >= 3 ? `${row.destination} — Delivered` : stage >= 1 ? "In transit" : row.origin),
     live: stage === 1 || stage === 2,
-    history: buildHistory(row, status),
+    route: meta,
+    etaISO: meta?.eta ?? (row.estimated_delivery ? new Date(row.estimated_delivery).toISOString() : null),
+    createdAt: row.created_at,
+    history: buildHistory(row, status, locationLabel),
   };
 }
+
 
 /* ---------------- queries ---------------- */
 
