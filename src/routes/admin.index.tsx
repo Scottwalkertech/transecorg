@@ -268,12 +268,45 @@ function AdminConsole({ email }: { email: string }) {
           </div>
 
           <div className="mt-6 space-y-4">
-            <Field label="Origin" icon={MapPin}>
-              <input required value={form.origin} onChange={e => set("origin", e.target.value)} placeholder="Rotterdam, NL" className={inputCls} />
-            </Field>
-            <Field label="Destination" icon={MapPin}>
-              <input required value={form.destination} onChange={e => set("destination", e.target.value)} placeholder="New York, US" className={inputCls} />
-            </Field>
+            <AddressField
+              label="Origin"
+              placeholder="Rotterdam, NL"
+              value={form.origin}
+              onChange={v => { set("origin", v); setOriginPlace(null); }}
+              onSelect={p => { set("origin", p.name); setOriginPlace(p); }}
+              place={originPlace}
+            />
+            <AddressField
+              label="Destination"
+              placeholder="New York, US"
+              value={form.destination}
+              onChange={v => { set("destination", v); setDestPlace(null); }}
+              onSelect={p => { set("destination", p.name); setDestPlace(p); }}
+              place={destPlace}
+            />
+
+            <div className="rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-xs">
+              {routing ? (
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin" /> Calculating optimal route…
+                </span>
+              ) : route ? (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-semibold text-foreground">
+                    {route.miles.toLocaleString()} mi · {route.km.toLocaleString()} km
+                  </span>
+                  <span className="text-muted-foreground">
+                    {Math.round(route.miles / 60 + 8)} h transit @ 60 mph + 8 h buffer
+                    {route.osrm ? "" : " · est."}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-muted-foreground">
+                  Pick both addresses from the suggestions to auto-calculate distance and ETA.
+                </span>
+              )}
+            </div>
+
             <Field label="Current Location" icon={Navigation}>
               <input required value={form.current_location} onChange={e => set("current_location", e.target.value)} placeholder="Rotterdam Hub, NL" className={inputCls} />
             </Field>
@@ -286,6 +319,7 @@ function AdminConsole({ email }: { email: string }) {
               <input required type="date" value={form.estimated_delivery} onChange={e => set("estimated_delivery", e.target.value)} className={inputCls} />
             </Field>
           </div>
+
 
           <button
             type="submit"
