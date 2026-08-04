@@ -25,5 +25,18 @@ export type Shipment = {
   currentLocation: string;
   history: HistoryEvent[];
   live: boolean; // whether progress should animate
+  /** Computed route distance / coordinates saved by the admin console */
+  route?: {
+    miles: number;
+    km: number;
+    origin?: { lat: number; lon: number };
+    dest?: { lat: number; lon: number };
+    eta?: string;
+    osrm?: boolean;
+  } | null;
+  /** ISO estimated delivery timestamp, when known */
+  etaISO?: string | null;
+  createdAt?: string;
 };
+
 

@@ -33,6 +33,18 @@ import {
   type TrackingStatus,
 } from "@/lib/tracking-db";
 import { signOut, useSupabaseSession } from "@/lib/supabase-auth";
+import {
+  calculateRoute,
+  etaFromMiles,
+  packLocation,
+  toDateInput,
+  unpackLocation,
+
+  usePlaceSuggestions,
+  type GeoPlace,
+  type RouteMeta,
+} from "@/lib/geo";
+
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
@@ -108,9 +120,40 @@ function AdminConsole({ email }: { email: string }) {
   const [busy, setBusy] = useState(false);
   const { rows, loading, error, refresh } = useTrackingRows();
 
+  // Smart route engine state
+  const [originPlace, setOriginPlace] = useState<GeoPlace | null>(null);
+  const [destPlace, setDestPlace] = useState<GeoPlace | null>(null);
+  const [route, setRoute] = useState<RouteMeta | null>(null);
+  const [routing, setRouting] = useState(false);
+
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm(f => ({ ...f, [key]: value }));
   }
+
+  // Auto-calculate distance + ETA as soon as both endpoints have coordinates.
+  useEffect(() => {
+    if (!originPlace || !destPlace) {
+      setRoute(null);
+      return;
+    }
+    let cancelled = false;
+    setRouting(true);
+    calculateRoute(originPlace, destPlace)
+      .then(meta => {
+        if (cancelled) return;
+        setRoute(meta);
+        setForm(f => ({
+          ...f,
+          estimated_delivery: toDateInput(meta.eta ? new Date(meta.eta) : etaFromMiles(meta.miles)),
+        }));
+        toast.success("Route calculated", {
+          description: `${meta.miles.toLocaleString()} mi · ETA auto-set (${meta.osrm ? "OSRM road distance" : "great-circle fallback"})`,
+        });
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setRouting(false); });
+    return () => { cancelled = true; };
+  }, [originPlace, destPlace]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -123,12 +166,16 @@ function AdminConsole({ email }: { email: string }) {
     try {
       const created = await createTrackingRow({
         ...parsed.data,
+        current_location: packLocation(parsed.data.current_location, route),
         tracking_number: generateTrackingNumber(parsed.data.destination),
       });
       toast.success("Shipment created", {
         description: `Tracking ID ${created.tracking_number} saved. Now searchable on the public tracker.`,
       });
       setForm(EMPTY);
+      setOriginPlace(null);
+      setDestPlace(null);
+      setRoute(null);
       refresh();
     } catch (err) {
       toast.error("Could not create shipment", { description: (err as Error).message });
@@ -136,6 +183,7 @@ function AdminConsole({ email }: { email: string }) {
       setBusy(false);
     }
   }
+
 
   async function onDelete(row: TrackingRow) {
     try {
@@ -222,12 +270,45 @@ function AdminConsole({ email }: { email: string }) {
           </div>
 
           <div className="mt-6 space-y-4">
-            <Field label="Origin" icon={MapPin}>
-              <input required value={form.origin} onChange={e => set("origin", e.target.value)} placeholder="Rotterdam, NL" className={inputCls} />
-            </Field>
-            <Field label="Destination" icon={MapPin}>
-              <input required value={form.destination} onChange={e => set("destination", e.target.value)} placeholder="New York, US" className={inputCls} />
-            </Field>
+            <AddressField
+              label="Origin"
+              placeholder="Rotterdam, NL"
+              value={form.origin}
+              onChange={v => { set("origin", v); setOriginPlace(null); }}
+              onSelect={p => { set("origin", p.name); setOriginPlace(p); }}
+              place={originPlace}
+            />
+            <AddressField
+              label="Destination"
+              placeholder="New York, US"
+              value={form.destination}
+              onChange={v => { set("destination", v); setDestPlace(null); }}
+              onSelect={p => { set("destination", p.name); setDestPlace(p); }}
+              place={destPlace}
+            />
+
+            <div className="rounded-xl border border-border bg-muted/40 px-3 py-2.5 text-xs">
+              {routing ? (
+                <span className="flex items-center gap-1.5 text-muted-foreground">
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin" /> Calculating optimal route…
+                </span>
+              ) : route ? (
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-semibold text-foreground">
+                    {route.miles.toLocaleString()} mi · {route.km.toLocaleString()} km
+                  </span>
+                  <span className="text-muted-foreground">
+                    {Math.round(route.miles / 60 + 8)} h transit @ 60 mph + 8 h buffer
+                    {route.osrm ? "" : " · est."}
+                  </span>
+                </div>
+              ) : (
+                <span className="text-muted-foreground">
+                  Pick both addresses from the suggestions to auto-calculate distance and ETA.
+                </span>
+              )}
+            </div>
+
             <Field label="Current Location" icon={Navigation}>
               <input required value={form.current_location} onChange={e => set("current_location", e.target.value)} placeholder="Rotterdam Hub, NL" className={inputCls} />
             </Field>
@@ -240,6 +321,7 @@ function AdminConsole({ email }: { email: string }) {
               <input required type="date" value={form.estimated_delivery} onChange={e => set("estimated_delivery", e.target.value)} className={inputCls} />
             </Field>
           </div>
+
 
           <button
             type="submit"
@@ -303,9 +385,11 @@ function AdminConsole({ email }: { email: string }) {
                           <span className="font-medium">{r.origin}</span> <span className="text-muted-foreground">→</span> <span className="font-medium">{r.destination}</span>
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {r.current_location || "Location pending"}
+                          {unpackLocation(r.current_location).label || "Location pending"}
+                          {unpackLocation(r.current_location).meta ? ` · ${unpackLocation(r.current_location).meta!.miles.toLocaleString()} mi route` : ""}
                           {r.estimated_delivery ? ` · ETA ${new Date(r.estimated_delivery).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}` : ""}
                         </p>
+
                       </div>
                       <div className="flex items-center gap-2">
                         <select
@@ -344,10 +428,11 @@ function AdminConsole({ email }: { email: string }) {
 }
 
 function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => void }) {
+  const meta = unpackLocation(row.current_location).meta;
   const [details, setDetails] = useState({
     origin: row.origin,
     destination: row.destination,
-    current_location: row.current_location ?? "",
+    current_location: unpackLocation(row.current_location).label,
     estimated_delivery: row.estimated_delivery?.slice(0, 10) ?? "",
   });
   const [saving, setSaving] = useState(false);
@@ -356,7 +441,7 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
     setDetails({
       origin: row.origin,
       destination: row.destination,
-      current_location: row.current_location ?? "",
+      current_location: unpackLocation(row.current_location).label,
       estimated_delivery: row.estimated_delivery?.slice(0, 10) ?? "",
     });
   }, [row.id, row.updated_at]);
@@ -364,8 +449,12 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
   async function saveDetails() {
     setSaving(true);
     try {
-      await updateTrackingRow(row.id, details);
+      await updateTrackingRow(row.id, {
+        ...details,
+        current_location: packLocation(details.current_location, meta),
+      });
       toast.success("Shipment updated", { description: row.tracking_number });
+
       onSaved();
     } catch (err) {
       toast.error("Update failed", { description: (err as Error).message });
@@ -405,6 +494,67 @@ function ShipmentEditor({ row, onSaved }: { row: TrackingRow; onSaved: () => voi
     </div>
   );
 }
+
+function AddressField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  onSelect,
+  place,
+}: {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (v: string) => void;
+  onSelect: (p: GeoPlace) => void;
+  place: GeoPlace | null;
+}) {
+  const [open, setOpen] = useState(false);
+  const { results, loading } = usePlaceSuggestions(value, open && !place);
+
+  return (
+    <div className="relative">
+      <Field label={label} icon={MapPin}>
+        <input
+          required
+          value={value}
+          onChange={e => { onChange(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder={placeholder}
+          autoComplete="off"
+          className={inputCls}
+        />
+      </Field>
+      {place && (
+        <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-success">
+          <Navigation className="h-3 w-3" /> {place.lat.toFixed(4)}, {place.lon.toFixed(4)}
+        </p>
+      )}
+      {open && !place && (loading || results.length > 0) && (
+        <ul className="absolute z-30 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-border bg-popover p-1 shadow-elegant">
+          {loading && results.length === 0 && (
+            <li className="px-3 py-2 text-xs text-muted-foreground">Searching addresses…</li>
+          )}
+          {results.map(r => (
+            <li key={`${r.lat}-${r.lon}-${r.name}`}>
+              <button
+                type="button"
+                onMouseDown={e => e.preventDefault()}
+                onClick={() => { onSelect(r); setOpen(false); }}
+                className="block w-full rounded-md px-3 py-2 text-left text-xs text-popover-foreground hover:bg-muted"
+              >
+                {r.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 
 const inputCls =
   "w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary";
