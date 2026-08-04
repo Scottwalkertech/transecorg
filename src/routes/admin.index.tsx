@@ -383,9 +383,11 @@ function AdminConsole({ email }: { email: string }) {
                           <span className="font-medium">{r.origin}</span> <span className="text-muted-foreground">→</span> <span className="font-medium">{r.destination}</span>
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {r.current_location || "Location pending"}
+                          {unpackLocation(r.current_location).label || "Location pending"}
+                          {unpackLocation(r.current_location).meta ? ` · ${unpackLocation(r.current_location).meta!.miles.toLocaleString()} mi route` : ""}
                           {r.estimated_delivery ? ` · ETA ${new Date(r.estimated_delivery).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}` : ""}
                         </p>
+
                       </div>
                       <div className="flex items-center gap-2">
                         <select
