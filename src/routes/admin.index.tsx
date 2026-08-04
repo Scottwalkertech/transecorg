@@ -108,9 +108,40 @@ function AdminConsole({ email }: { email: string }) {
   const [busy, setBusy] = useState(false);
   const { rows, loading, error, refresh } = useTrackingRows();
 
+  // Smart route engine state
+  const [originPlace, setOriginPlace] = useState<GeoPlace | null>(null);
+  const [destPlace, setDestPlace] = useState<GeoPlace | null>(null);
+  const [route, setRoute] = useState<RouteMeta | null>(null);
+  const [routing, setRouting] = useState(false);
+
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm(f => ({ ...f, [key]: value }));
   }
+
+  // Auto-calculate distance + ETA as soon as both endpoints have coordinates.
+  useEffect(() => {
+    if (!originPlace || !destPlace) {
+      setRoute(null);
+      return;
+    }
+    let cancelled = false;
+    setRouting(true);
+    calculateRoute(originPlace, destPlace)
+      .then(meta => {
+        if (cancelled) return;
+        setRoute(meta);
+        setForm(f => ({
+          ...f,
+          estimated_delivery: toDateInput(meta.eta ? new Date(meta.eta) : etaFromMiles(meta.miles)),
+        }));
+        toast.success("Route calculated", {
+          description: `${meta.miles.toLocaleString()} mi · ETA auto-set (${meta.osrm ? "OSRM road distance" : "great-circle fallback"})`,
+        });
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setRouting(false); });
+    return () => { cancelled = true; };
+  }, [originPlace, destPlace]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -123,12 +154,16 @@ function AdminConsole({ email }: { email: string }) {
     try {
       const created = await createTrackingRow({
         ...parsed.data,
+        current_location: packLocation(parsed.data.current_location, route),
         tracking_number: generateTrackingNumber(parsed.data.destination),
       });
       toast.success("Shipment created", {
         description: `Tracking ID ${created.tracking_number} saved. Now searchable on the public tracker.`,
       });
       setForm(EMPTY);
+      setOriginPlace(null);
+      setDestPlace(null);
+      setRoute(null);
       refresh();
     } catch (err) {
       toast.error("Could not create shipment", { description: (err as Error).message });
@@ -136,6 +171,7 @@ function AdminConsole({ email }: { email: string }) {
       setBusy(false);
     }
   }
+
 
   async function onDelete(row: TrackingRow) {
     try {
