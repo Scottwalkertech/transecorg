@@ -136,9 +136,18 @@ function TrackingPage() {
         </div>
       </section>
 
+      {shipment.stage === 1 || shipment.stage === 2 ? (
+        <div className="mx-auto max-w-7xl space-y-6 px-4 pt-8 sm:px-6 lg:px-8">
+          <LiveTelemetryHUD shipment={shipment} />
+          <NeonStepper stage={shipment.stage} />
+          <SatelliteTerminal shipment={shipment} />
+        </div>
+      ) : null}
+
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
         {/* MAIN */}
         <div className="space-y-6 lg:col-span-2">
+
           {/* Stepper */}
           <div className="rounded-2xl border border-border bg-card p-6 shadow-card sm:p-8">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:justify-between">
