@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Shipment, ShipmentStage, HistoryEvent } from "./shipments";
+import { unpackLocation } from "./geo";
+
 
 export const TRACKING_TABLE = "tracking_shipments";
 
