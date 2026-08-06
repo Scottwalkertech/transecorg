@@ -142,19 +142,19 @@ function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
-        <div className="absolute inset-0 grid-bg opacity-50" aria-hidden />
-        <div className="absolute -right-32 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-secondary/20 blur-3xl" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary">
+      <section className="relative flex min-h-[640px] items-center overflow-hidden text-primary-foreground sm:min-h-[720px] lg:min-h-[800px]">
+        <HeroSlideshow />
+        <div className="absolute inset-0 grid-bg opacity-40" aria-hidden />
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
             Trusted by 12,000+ enterprises
           </span>
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight drop-shadow-sm sm:text-5xl lg:text-6xl">
             Move the world,<br />
             <span className="text-secondary">securely & on time.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base text-primary-foreground/75 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base text-primary-foreground/90 drop-shadow-sm sm:text-lg">
             Global freight, air cargo and ground delivery — with real-time GPS tracking, customs clearance, and 24/7 operations support.
           </p>
 
@@ -180,13 +180,11 @@ function HomePage() {
             </button>
           </form>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-primary-foreground/70">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-primary-foreground/90 drop-shadow-sm">
             <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" /> ISO 27001 Secure</span>
             <span className="flex items-center gap-1.5"><Globe2 className="h-4 w-4 text-secondary" /> 220+ Countries</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> 24/7 Live Support</span>
           </div>
-
-          <HeroSlideshow />
         </div>
       </section>
 
