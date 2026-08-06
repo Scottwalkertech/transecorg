@@ -323,7 +323,7 @@ function HomePage() {
               },
               {
                 photo: testimonial3,
-                name: "Amara Okafor",
+                name: "Amara jocham",
                 title: "VP Ops, Lumen Health",
                 quote:
                   "Cold-chain integrity, customs paperwork, temperature logs — TranSec handles the details so our team can focus on patients.",
