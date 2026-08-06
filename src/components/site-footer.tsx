@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -73,9 +75,8 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-4 lg:px-8">
         <div>
           <Link to="/" className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-orange text-secondary-foreground">
-              <Package className="h-5 w-5" />
-            </span>
+            <BrandLogo className="h-9 w-9 sm:h-10 sm:w-10" />
+
             <span className="font-display text-lg font-bold">TranSec Logistics</span>
           </Link>
           <p className="mt-4 text-sm text-primary-foreground/70">

@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
+import { Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
+
 import { useEffect, useState } from "react";
 import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
 import { useServices, SERVICE_ROUTE } from "@/lib/services";
@@ -25,9 +27,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground shadow-elegant transition-transform group-hover:scale-105">
-            <Package className="h-5 w-5" />
-          </span>
+          <BrandLogo className="h-9 w-9 transition-transform group-hover:scale-105 sm:h-10 sm:w-10" />
+
           <span className="flex flex-col leading-none">
             <span className="font-display text-lg font-bold tracking-tight text-foreground">
               TranSec
