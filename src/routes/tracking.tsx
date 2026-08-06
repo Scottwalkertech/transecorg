@@ -18,7 +18,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { useTrackedShipment } from "@/lib/tracking-db";
-import { LiveTelemetryHUD, NeonStepper, SatelliteTerminal } from "@/components/tracking/live-telemetry";
+
 
 
 
@@ -137,14 +137,6 @@ function TrackingPage() {
           </form>
         </div>
       </section>
-
-      {shipment.stage === 1 || shipment.stage === 2 ? (
-        <div className="mx-auto max-w-7xl space-y-6 px-4 pt-8 sm:px-6 lg:px-8">
-          <LiveTelemetryHUD shipment={shipment} />
-          <NeonStepper stage={shipment.stage} />
-          <SatelliteTerminal shipment={shipment} />
-        </div>
-      ) : null}
 
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-10 sm:px-6 lg:grid-cols-3 lg:px-8">
         {/* MAIN */}
