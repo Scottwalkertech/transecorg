@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Mail, ArrowRight } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
+
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
