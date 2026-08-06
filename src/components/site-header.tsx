@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
+import { Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
+
 import { useEffect, useState } from "react";
 import { getSession, useSessionSync, type MockSession } from "@/lib/mock-session";
 import { useServices, SERVICE_ROUTE } from "@/lib/services";
