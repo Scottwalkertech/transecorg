@@ -56,7 +56,7 @@ const quoteSchema = z.object({
   email: z.string().trim().email("Enter a valid email").max(255),
 });
 
-function HeroSlideshow() {
+function HeroSlideshow({ className }: { className?: string }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -67,23 +67,23 @@ function HeroSlideshow() {
   }, []);
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-primary-foreground/10 bg-primary/20 shadow-elegant sm:mt-14">
-      <div className="relative aspect-[16/9] w-full sm:aspect-[21/9]">
-        {heroSlides.map((slide, i) => (
-          <img
-            key={slide.src}
-            src={slide.src}
-            alt={slide.alt}
-            loading={i === 0 ? "eager" : "lazy"}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/20" />
-      </div>
+    <div className={`absolute inset-0 overflow-hidden ${className ?? ""}`} aria-hidden>
+      {heroSlides.map((slide, i) => (
+        <img
+          key={slide.src}
+          src={slide.src}
+          alt={slide.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      {/* Rich navy overlay for readability and brand cohesion */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/70 to-primary/90" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-transparent to-primary/60" />
 
-      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
         {heroSlides.map((_, i) => (
           <button
             key={i}
@@ -142,19 +142,19 @@ function HomePage() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero text-primary-foreground">
-        <div className="absolute inset-0 grid-bg opacity-50" aria-hidden />
-        <div className="absolute -right-32 top-1/2 h-[520px] w-[520px] -translate-y-1/2 rounded-full bg-secondary/20 blur-3xl" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary">
+      <section className="relative flex min-h-[640px] items-center overflow-hidden text-primary-foreground sm:min-h-[720px] lg:min-h-[800px]">
+        <HeroSlideshow />
+        <div className="absolute inset-0 grid-bg opacity-40" aria-hidden />
+        <div className="relative mx-auto w-full max-w-4xl px-4 py-20 text-center sm:px-6 lg:px-8 lg:py-24">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/20 bg-primary-foreground/10 px-3 py-1 text-xs font-medium uppercase tracking-wider text-secondary backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
             Trusted by 12,000+ enterprises
           </span>
-          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 font-display text-4xl font-bold leading-[1.05] tracking-tight drop-shadow-sm sm:text-5xl lg:text-6xl">
             Move the world,<br />
             <span className="text-secondary">securely & on time.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base text-primary-foreground/75 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base text-primary-foreground/90 drop-shadow-sm sm:text-lg">
             Global freight, air cargo and ground delivery — with real-time GPS tracking, customs clearance, and 24/7 operations support.
           </p>
 
@@ -180,13 +180,11 @@ function HomePage() {
             </button>
           </form>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-primary-foreground/70">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-primary-foreground/90 drop-shadow-sm">
             <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-secondary" /> ISO 27001 Secure</span>
             <span className="flex items-center gap-1.5"><Globe2 className="h-4 w-4 text-secondary" /> 220+ Countries</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> 24/7 Live Support</span>
           </div>
-
-          <HeroSlideshow />
         </div>
       </section>
 
