@@ -56,7 +56,7 @@ const quoteSchema = z.object({
   email: z.string().trim().email("Enter a valid email").max(255),
 });
 
-function HeroSlideshow() {
+function HeroSlideshow({ className }: { className?: string }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -67,23 +67,23 @@ function HeroSlideshow() {
   }, []);
 
   return (
-    <div className="relative mx-auto mt-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-primary-foreground/10 bg-primary/20 shadow-elegant sm:mt-14">
-      <div className="relative aspect-[16/9] w-full sm:aspect-[21/9]">
-        {heroSlides.map((slide, i) => (
-          <img
-            key={slide.src}
-            src={slide.src}
-            alt={slide.alt}
-            loading={i === 0 ? "eager" : "lazy"}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
-              i === index ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/20" />
-      </div>
+    <div className={`absolute inset-0 overflow-hidden ${className ?? ""}`} aria-hidden>
+      {heroSlides.map((slide, i) => (
+        <img
+          key={slide.src}
+          src={slide.src}
+          alt={slide.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      {/* Rich navy overlay for readability and brand cohesion */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/85 via-primary/70 to-primary/90" />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-transparent to-primary/60" />
 
-      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
         {heroSlides.map((_, i) => (
           <button
             key={i}
