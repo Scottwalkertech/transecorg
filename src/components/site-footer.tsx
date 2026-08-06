@@ -113,7 +113,7 @@ export function SiteFooter() {
           <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary">Contact</h4>
           <ul className="mt-4 space-y-2 text-sm text-primary-foreground/75">
             <li>1-800-TRANSEC</li>
-            <li>support@transec.example</li>
+            <li>support@transeclogistics.com</li>
             <li>24/7 Operations</li>
           </ul>
         </div>
