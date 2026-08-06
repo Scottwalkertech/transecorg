@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import {
@@ -29,6 +29,13 @@ const testimonial1 = "https://images.unsplash.com/photo-1580489944761-15a19d6549
 const testimonial2 = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80";
 const testimonial3 = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
 
+const heroSlides = [
+  { src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80", alt: "Container ship at sunset" },
+  { src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", alt: "Cargo airplane on the tarmac" },
+  { src: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80", alt: "Semi-truck on a highway at dusk" },
+  { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80", alt: "Warehouse operations team" },
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -48,6 +55,49 @@ const quoteSchema = z.object({
   weight: z.coerce.number().positive("Weight must be greater than 0").max(100000, "Weight too large"),
   email: z.string().trim().email("Enter a valid email").max(255),
 });
+
+function HeroSlideshow() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex(prev => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative mx-auto mt-10 w-full max-w-5xl overflow-hidden rounded-2xl border border-primary-foreground/10 bg-primary/20 shadow-elegant sm:mt-14">
+      <div className="relative aspect-[16/9] w-full sm:aspect-[21/9]">
+        {heroSlides.map((slide, i) => (
+          <img
+            key={slide.src}
+            src={slide.src}
+            alt={slide.alt}
+            loading={i === 0 ? "eager" : "lazy"}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-primary/20" />
+      </div>
+
+      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+        {heroSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            aria-label={`Show slide ${i + 1}`}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              i === index ? "w-6 bg-secondary" : "w-2 bg-primary-foreground/50 hover:bg-primary-foreground/80"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function HomePage() {
   const navigate = useNavigate();
@@ -135,6 +185,8 @@ function HomePage() {
             <span className="flex items-center gap-1.5"><Globe2 className="h-4 w-4 text-secondary" /> 220+ Countries</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> 24/7 Live Support</span>
           </div>
+
+          <HeroSlideshow />
         </div>
       </section>
 
