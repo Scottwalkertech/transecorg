@@ -29,6 +29,13 @@ const testimonial1 = "https://images.unsplash.com/photo-1580489944761-15a19d6549
 const testimonial2 = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80";
 const testimonial3 = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
 
+const heroSlides = [
+  { src: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80", alt: "Container ship at sunset" },
+  { src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80", alt: "Cargo airplane on the tarmac" },
+  { src: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80", alt: "Semi-truck on a highway at dusk" },
+  { src: "https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1200&q=80", alt: "Warehouse operations team" },
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
