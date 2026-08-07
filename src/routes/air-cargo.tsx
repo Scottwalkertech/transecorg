@@ -16,9 +16,30 @@ export const Route = createFileRoute("/air-cargo")({
 });
 
 const tiers = [
-  { name: "Express", days: "24–48h", desc: "Next-flight-out priority handling for time-critical shipments.", color: "from-secondary to-orange-500", badge: "Fastest" },
-  { name: "Expedited", days: "2–4 days", desc: "Premium scheduled air freight with guaranteed lift on each leg.", color: "from-primary-glow to-primary", badge: "Popular" },
-  { name: "Standard", days: "5–8 days", desc: "Cost-effective consolidated air freight with reliable transit windows.", color: "from-muted-foreground/60 to-muted-foreground", badge: "Value" },
+  {
+    name: "Express",
+    days: "24–48h",
+    desc: "Next-flight-out priority handling for time-critical shipments.",
+    color: "from-secondary/85 via-orange-600/70 to-slate-950/85",
+    badge: "Fastest",
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    name: "Expedited",
+    days: "2–4 days",
+    desc: "Premium scheduled air freight with guaranteed lift on each leg.",
+    color: "from-primary/85 via-primary/70 to-slate-950/90",
+    badge: "Popular",
+    image: "https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    name: "Standard",
+    days: "5–8 days",
+    desc: "Cost-effective consolidated air freight with reliable transit windows.",
+    color: "from-slate-700/85 via-slate-800/75 to-slate-950/90",
+    badge: "Value",
+    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80",
+  },
 ];
 
 function AirCargoPage() {
@@ -37,14 +58,22 @@ function AirCargoPage() {
       <p className="mt-2 text-sm text-muted-foreground">Choose the speed tier that matches your cost-vs-urgency profile.</p>
       <div className="mt-6 grid gap-5 md:grid-cols-3">
         {tiers.map(t => (
-          <div key={t.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-            <div className={`bg-gradient-to-br ${t.color} px-6 py-5 text-white`}>
+          <div key={t.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
+            <div className="relative isolate min-h-[180px] px-6 py-5 text-white">
+              <img
+                src={t.image}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                className="absolute inset-0 -z-10 h-full w-full object-cover"
+              />
+              <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${t.color}`} />
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider opacity-90">{t.badge}</span>
                 <Plane className="h-5 w-5 opacity-90" />
               </div>
-              <h3 className="mt-2 font-display text-2xl font-bold">{t.name}</h3>
-              <p className="mt-1 text-3xl font-bold">{t.days}</p>
+              <h3 className="mt-6 font-display text-2xl font-bold drop-shadow">{t.name}</h3>
+              <p className="mt-1 text-3xl font-bold drop-shadow">{t.days}</p>
             </div>
             <div className="p-6">
               <p className="text-sm text-muted-foreground">{t.desc}</p>
