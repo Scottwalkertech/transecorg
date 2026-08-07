@@ -16,9 +16,30 @@ export const Route = createFileRoute("/air-cargo")({
 });
 
 const tiers = [
-  { name: "Express", days: "24–48h", desc: "Next-flight-out priority handling for time-critical shipments.", color: "from-secondary to-orange-500", badge: "Fastest" },
-  { name: "Expedited", days: "2–4 days", desc: "Premium scheduled air freight with guaranteed lift on each leg.", color: "from-primary-glow to-primary", badge: "Popular" },
-  { name: "Standard", days: "5–8 days", desc: "Cost-effective consolidated air freight with reliable transit windows.", color: "from-muted-foreground/60 to-muted-foreground", badge: "Value" },
+  {
+    name: "Express",
+    days: "24–48h",
+    desc: "Next-flight-out priority handling for time-critical shipments.",
+    color: "from-secondary/85 via-orange-600/70 to-slate-950/85",
+    badge: "Fastest",
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    name: "Expedited",
+    days: "2–4 days",
+    desc: "Premium scheduled air freight with guaranteed lift on each leg.",
+    color: "from-primary/85 via-primary/70 to-slate-950/90",
+    badge: "Popular",
+    image: "https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&w=1600&q=80",
+  },
+  {
+    name: "Standard",
+    days: "5–8 days",
+    desc: "Cost-effective consolidated air freight with reliable transit windows.",
+    color: "from-slate-700/85 via-slate-800/75 to-slate-950/90",
+    badge: "Value",
+    image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1600&q=80",
+  },
 ];
 
 function AirCargoPage() {
