@@ -103,12 +103,25 @@ export function PageShell({
 export function FeatureCard({
   icon: Icon,
   title,
+  variant = "light",
   children,
 }: {
   icon: LucideIcon;
   title: string;
+  variant?: "light" | "glass";
   children: ReactNode;
 }) {
+  if (variant === "glass") {
+    return (
+      <div className="rounded-xl border border-white/15 bg-white/10 p-6 shadow-elegant backdrop-blur-md transition-all hover:-translate-y-0.5 hover:border-secondary/50 hover:bg-white/15">
+        <span className="grid h-11 w-11 place-items-center rounded-lg bg-secondary/20 text-secondary">
+          <Icon className="h-5 w-5" />
+        </span>
+        <h3 className="mt-4 font-display text-lg font-semibold text-white">{title}</h3>
+        <p className="mt-2 text-sm text-white/75">{children}</p>
+      </div>
+    );
+  }
   return (
     <div className="rounded-xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
       <span className="grid h-11 w-11 place-items-center rounded-lg bg-primary/5 text-primary">
@@ -119,6 +132,40 @@ export function FeatureCard({
     </div>
   );
 }
+
+/** A photo-backed section band: background image + navy overlay + glass content. */
+export function FeatureBand({
+  title,
+  subtitle,
+  image,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  image: string;
+  children: ReactNode;
+}) {
+  return (
+    <section className="relative isolate mt-16 overflow-hidden rounded-3xl">
+      <img
+        src={image}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-primary/55" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/35 to-slate-950/75" />
+      <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl" />
+      <div className="relative px-6 py-12 sm:px-10 sm:py-16">
+        <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">{title}</h2>
+        {subtitle && <p className="mt-2 max-w-2xl text-sm text-white/75 sm:text-base">{subtitle}</p>}
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{children}</div>
+      </div>
+    </section>
+  );
+}
+
 
 export function CTASection() {
   return (

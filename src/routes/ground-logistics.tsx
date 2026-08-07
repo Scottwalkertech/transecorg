@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Truck, MapPin, Route as RouteIcon, Boxes, Clock, ShieldCheck } from "lucide-react";
-import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { PageShell, FeatureCard, FeatureBand, CTASection } from "@/components/page-shell";
 import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/ground-logistics")({
@@ -45,15 +45,18 @@ function GroundPage() {
         </div>
       </div>
 
-      <h2 className="mt-16 font-display text-2xl font-bold text-foreground">Network capabilities</h2>
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <FeatureCard icon={RouteIcon} title="12,000+ carriers">Pre-qualified, insured, and continuously scored on on-time performance.</FeatureCard>
-        <FeatureCard icon={Clock} title="Same-day & next-day">Regional same-day networks in 38 metros with sub-2-hour pickup.</FeatureCard>
-        <FeatureCard icon={ShieldCheck} title="TSA-certified">High-value and TSA-screened freight handled under dual-driver protocol.</FeatureCard>
-        <FeatureCard icon={MapPin} title="Live GPS visibility">Trailer-level telematics surfaced in your tracking dashboard.</FeatureCard>
-        <FeatureCard icon={Boxes} title="Cross-dock">Strategic cross-dock terminals at 42 locations for hub-and-spoke routing.</FeatureCard>
-        <FeatureCard icon={Truck} title="Specialized equipment">Reefer, flatbed, lift-gate, and hazmat-endorsed fleet on demand.</FeatureCard>
-      </div>
+      <FeatureBand
+        title="Network capabilities"
+        subtitle="A vetted 12,000-carrier fleet with trailer-level telematics across 48 states."
+        image="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=2400&q=80"
+      >
+        <FeatureCard variant="glass" icon={RouteIcon} title="12,000+ carriers">Pre-qualified, insured, and continuously scored on on-time performance.</FeatureCard>
+        <FeatureCard variant="glass" icon={Clock} title="Same-day & next-day">Regional same-day networks in 38 metros with sub-2-hour pickup.</FeatureCard>
+        <FeatureCard variant="glass" icon={ShieldCheck} title="TSA-certified">High-value and TSA-screened freight handled under dual-driver protocol.</FeatureCard>
+        <FeatureCard variant="glass" icon={MapPin} title="Live GPS visibility">Trailer-level telematics surfaced in your tracking dashboard.</FeatureCard>
+        <FeatureCard variant="glass" icon={Boxes} title="Cross-dock">Strategic cross-dock terminals at 42 locations for hub-and-spoke routing.</FeatureCard>
+        <FeatureCard variant="glass" icon={Truck} title="Specialized equipment">Reefer, flatbed, lift-gate, and hazmat-endorsed fleet on demand.</FeatureCard>
+      </FeatureBand>
 
       <CTASection />
     </PageShell>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plane, Zap, Clock, Globe2, ShieldCheck, Package } from "lucide-react";
-import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { PageShell, FeatureCard, FeatureBand, CTASection } from "@/components/page-shell";
 import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/air-cargo")({
@@ -53,15 +53,18 @@ function AirCargoPage() {
         ))}
       </div>
 
-      <h2 className="mt-16 font-display text-2xl font-bold text-foreground">Built for time-sensitive cargo</h2>
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <FeatureCard icon={Zap} title="Next-flight-out">24/7 dispatch desk books the very next commercial or charter lift.</FeatureCard>
-        <FeatureCard icon={Globe2} title="220+ airport pairs">Direct connections through every major hub: HKG, MEM, FRA, DXB, LAX.</FeatureCard>
-        <FeatureCard icon={ShieldCheck} title="Pharma & cold chain">CEIV Pharma certified handling with active temperature control.</FeatureCard>
-        <FeatureCard icon={Package} title="Dangerous goods">IATA DGR certified team for batteries, chemicals, and regulated cargo.</FeatureCard>
-        <FeatureCard icon={Clock} title="Live milestone tracking">Booked, tendered, manifested, departed, arrived, delivered — pushed live.</FeatureCard>
-        <FeatureCard icon={Plane} title="Charter solutions">Full or part-charter aircraft for outsized or AOG shipments.</FeatureCard>
-      </div>
+      <FeatureBand
+        title="Built for time-sensitive cargo"
+        subtitle="Charter lift, pharma-grade cold chain, and live milestones on 220+ airport pairs."
+        image="https://images.unsplash.com/photo-1583829962247-a0f60c1a2f5f?auto=format&fit=crop&w=2400&q=80"
+      >
+        <FeatureCard variant="glass" icon={Zap} title="Next-flight-out">24/7 dispatch desk books the very next commercial or charter lift.</FeatureCard>
+        <FeatureCard variant="glass" icon={Globe2} title="220+ airport pairs">Direct connections through every major hub: HKG, MEM, FRA, DXB, LAX.</FeatureCard>
+        <FeatureCard variant="glass" icon={ShieldCheck} title="Pharma & cold chain">CEIV Pharma certified handling with active temperature control.</FeatureCard>
+        <FeatureCard variant="glass" icon={Package} title="Dangerous goods">IATA DGR certified team for batteries, chemicals, and regulated cargo.</FeatureCard>
+        <FeatureCard variant="glass" icon={Clock} title="Live milestone tracking">Booked, tendered, manifested, departed, arrived, delivered — pushed live.</FeatureCard>
+        <FeatureCard variant="glass" icon={Plane} title="Charter solutions">Full or part-charter aircraft for outsized or AOG shipments.</FeatureCard>
+      </FeatureBand>
 
       <CTASection />
     </PageShell>
