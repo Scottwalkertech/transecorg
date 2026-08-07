@@ -371,61 +371,151 @@ function NotFoundView({
   setInput: (v: string) => void;
   onSubmit: (v: string) => void;
 }) {
+  const searched = id.trim();
+
   return (
-    <div className="bg-muted/30">
+    <div className="min-h-screen bg-muted/30">
+      {/* Sub-header */}
       <section className="border-b border-border bg-background">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-destructive">Tracking · Not Found</p>
-          <h1 className="mt-1 font-display text-2xl font-bold text-foreground sm:text-3xl">
-            {id ? <>Shipment <span className="text-destructive">{id}</span></> : "Enter a tracking number"}
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <FileSearch className="h-4 w-4 text-secondary" />
+            Tracking Lookup
+          </div>
+          <h1 className="mt-2 font-display text-2xl font-bold text-foreground sm:text-3xl">
+            {searched ? "Shipment lookup result" : "Track a shipment"}
           </h1>
+
           <form
             onSubmit={e => { e.preventDefault(); onSubmit(input.trim()); }}
-            className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-border bg-card p-2 shadow-card sm:flex"
+            className="mt-5 flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-2 shadow-card sm:flex-row"
           >
-            <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
-              <Search className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <div className="flex min-w-0 flex-1 items-center gap-3 px-3 py-1 w-full">
+              <Search className="h-5 w-5 shrink-0 text-muted-foreground" />
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                placeholder="Enter tracking number"
-                className="min-w-0 flex-1 bg-transparent py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                placeholder="Enter your TranSec tracking number"
+                className="min-w-0 flex-1 bg-transparent py-2.5 text-sm text-foreground outline-none placeholder:text-muted-foreground"
+                aria-label="Tracking number"
               />
             </div>
-            <button className="shrink-0 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-glow">
+            <button className="w-full shrink-0 rounded-xl bg-gradient-orange px-6 py-2.5 text-sm font-semibold text-secondary-foreground shadow-glow transition-transform active:scale-[0.98] sm:w-auto">
               Track
             </button>
           </form>
         </div>
       </section>
 
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-destructive/25 bg-card p-10 text-center shadow-card">
-          <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-destructive/10 text-destructive">
-            <AlertTriangle className="h-7 w-7" />
+      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          {/* Primary not-found card */}
+          <div className="rounded-3xl border border-border bg-card p-8 shadow-card sm:p-10">
+            <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+              <div className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-destructive/10 text-destructive">
+                <PackageX className="h-8 w-8" />
+              </div>
+              <div className="min-w-0">
+                <h2 className="font-display text-xl font-bold text-foreground sm:text-2xl">
+                  We couldn't locate this shipment
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Our system searched every active TranSec consignment and found no matching record.
+                </p>
+              </div>
+            </div>
+
+            {searched && (
+              <div className="mt-6 rounded-2xl bg-muted/50 p-5">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Searched tracking number</p>
+                <div className="mt-2 flex items-center gap-3">
+                  <span className="font-mono text-lg font-bold tracking-wide text-foreground break-all">{searched}</span>
+                  <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-destructive">
+                    Not found
+                  </span>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-8">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                <HelpCircle className="h-4 w-4 text-secondary" />
+                What to try next
+              </h3>
+              <ul className="mt-4 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+                <li className="flex items-start gap-3 rounded-xl bg-muted/40 p-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">1</span>
+                  Check for typos and extra spaces around the tracking ID.
+                </li>
+                <li className="flex items-start gap-3 rounded-xl bg-muted/40 p-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">2</span>
+                  Make sure the shipment has already been booked and labelled.
+                </li>
+                <li className="flex items-start gap-3 rounded-xl bg-muted/40 p-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">3</span>
+                  TranSec IDs use the format FTX-123456-US.
+                </li>
+                <li className="flex items-start gap-3 rounded-xl bg-muted/40 p-3">
+                  <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 text-xs font-bold text-primary">4</span>
+                  Contact your sender to confirm the tracking number.
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                to="/"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to home
+              </Link>
+              <a
+                href="mailto:support@transeclogistics.com"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-glow"
+              >
+                <Mail className="h-4 w-4" />
+                Contact support
+              </a>
+            </div>
           </div>
-          <h2 className="mt-5 font-display text-xl font-bold text-foreground">
-            Tracking ID not recognized.
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Please verify your number or contact support.
-          </p>
-          <div className="mt-6 flex flex-col items-center justify-center gap-2 sm:flex-row">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted"
-            >
-              Back to home
-            </Link>
-            <a
-              href="mailto:support@transec.example"
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-orange px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-glow"
-            >
-              Contact support
-            </a>
-          </div>
+
+          {/* Help sidebar */}
+          <aside className="space-y-6">
+            <div className="rounded-3xl bg-gradient-hero p-6 text-primary-foreground shadow-elegant">
+              <h3 className="font-display text-lg font-bold">Need help tracking?</h3>
+              <p className="mt-1 text-sm text-primary-foreground/80">
+                Our operations team is available 24/7 to locate your shipment and provide status updates.
+              </p>
+              <a
+                href="mailto:support@transeclogistics.com"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              >
+                <Mail className="h-4 w-4" />
+                Email support
+              </a>
+            </div>
+
+            <div className="rounded-3xl border border-border bg-card p-6 shadow-card">
+              <h3 className="font-display text-base font-bold text-foreground">Common tracking formats</h3>
+              <div className="mt-4 space-y-3">
+                <div className="flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Standard</span>
+                  <span className="font-mono text-sm font-medium text-foreground">FTX-123456-US</span>
+                </div>
+                <div className="flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Express</span>
+                  <span className="font-mono text-sm font-medium text-foreground">EXP-987654-EU</span>
+                </div>
+                <div className="flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Freight</span>
+                  <span className="font-mono text-sm font-medium text-foreground">FRG-554433-AS</span>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
