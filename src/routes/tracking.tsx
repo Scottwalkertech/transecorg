@@ -16,6 +16,11 @@ import {
   ShieldCheck,
   RefreshCw,
   AlertTriangle,
+  PackageX,
+  HelpCircle,
+  Mail,
+  ArrowLeft,
+  FileSearch,
 } from "lucide-react";
 import { useTrackedShipment } from "@/lib/tracking-db";
 
