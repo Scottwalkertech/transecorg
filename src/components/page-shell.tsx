@@ -154,8 +154,8 @@ export function FeatureBand({
         loading="lazy"
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-primary/85" />
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/85 via-slate-900/60 to-slate-950/85" />
+      <div className="absolute inset-0 bg-primary/55" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-slate-900/35 to-slate-950/75" />
       <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-secondary/20 blur-3xl" />
       <div className="relative px-6 py-12 sm:px-10 sm:py-16">
         <h2 className="font-display text-2xl font-bold text-white sm:text-3xl">{title}</h2>
