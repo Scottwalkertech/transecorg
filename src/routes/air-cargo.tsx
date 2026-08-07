@@ -58,14 +58,22 @@ function AirCargoPage() {
       <p className="mt-2 text-sm text-muted-foreground">Choose the speed tier that matches your cost-vs-urgency profile.</p>
       <div className="mt-6 grid gap-5 md:grid-cols-3">
         {tiers.map(t => (
-          <div key={t.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-            <div className={`bg-gradient-to-br ${t.color} px-6 py-5 text-white`}>
+          <div key={t.name} className="overflow-hidden rounded-2xl border border-border bg-card shadow-card transition-all hover:-translate-y-0.5 hover:shadow-elegant">
+            <div className="relative isolate min-h-[180px] px-6 py-5 text-white">
+              <img
+                src={t.image}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                className="absolute inset-0 -z-10 h-full w-full object-cover"
+              />
+              <div className={`absolute inset-0 -z-10 bg-gradient-to-br ${t.color}`} />
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider opacity-90">{t.badge}</span>
                 <Plane className="h-5 w-5 opacity-90" />
               </div>
-              <h3 className="mt-2 font-display text-2xl font-bold">{t.name}</h3>
-              <p className="mt-1 text-3xl font-bold">{t.days}</p>
+              <h3 className="mt-6 font-display text-2xl font-bold drop-shadow">{t.name}</h3>
+              <p className="mt-1 text-3xl font-bold drop-shadow">{t.days}</p>
             </div>
             <div className="p-6">
               <p className="text-sm text-muted-foreground">{t.desc}</p>
