@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Ship, Container, Anchor, Globe2, ShieldCheck, Clock } from "lucide-react";
-import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { PageShell, FeatureCard, FeatureBand, CTASection } from "@/components/page-shell";
 import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/ocean-freight")({
@@ -58,15 +58,18 @@ function OceanFreightPage() {
         </div>
       </div>
 
-      <h2 className="mt-16 font-display text-2xl font-bold text-foreground">Port logistics & coverage</h2>
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <FeatureCard icon={Anchor} title="180+ ports of call">Direct service to every major deep-sea port across Asia, Europe, the Americas, and MEA.</FeatureCard>
-        <FeatureCard icon={Container} title="Customs brokerage">In-house licensed brokers handle filings, duties, and clearance in 60+ jurisdictions.</FeatureCard>
-        <FeatureCard icon={Globe2} title="Trade lane optimization">AI-driven routing balances cost, transit time, and carbon footprint per shipment.</FeatureCard>
-        <FeatureCard icon={ShieldCheck} title="Cargo insurance">All-risk coverage up to declared CIF value, backed by AA-rated underwriters.</FeatureCard>
-        <FeatureCard icon={Clock} title="Real-time ETAs">Vessel tracking and port congestion alerts pushed to your dashboard.</FeatureCard>
-        <FeatureCard icon={Ship} title="Dedicated account team">A named coordinator owns your bookings from quote to delivery.</FeatureCard>
-      </div>
+      <FeatureBand
+        title="Port logistics & coverage"
+        subtitle="Direct sailings, licensed brokerage, and lane intelligence across every major trade route."
+        image="https://images.unsplash.com/photo-1605902711622-cfb43c4437b5?auto=format&fit=crop&w=2400&q=80"
+      >
+        <FeatureCard variant="glass" icon={Anchor} title="180+ ports of call">Direct service to every major deep-sea port across Asia, Europe, the Americas, and MEA.</FeatureCard>
+        <FeatureCard variant="glass" icon={Container} title="Customs brokerage">In-house licensed brokers handle filings, duties, and clearance in 60+ jurisdictions.</FeatureCard>
+        <FeatureCard variant="glass" icon={Globe2} title="Trade lane optimization">AI-driven routing balances cost, transit time, and carbon footprint per shipment.</FeatureCard>
+        <FeatureCard variant="glass" icon={ShieldCheck} title="Cargo insurance">All-risk coverage up to declared CIF value, backed by AA-rated underwriters.</FeatureCard>
+        <FeatureCard variant="glass" icon={Clock} title="Real-time ETAs">Vessel tracking and port congestion alerts pushed to your dashboard.</FeatureCard>
+        <FeatureCard variant="glass" icon={Ship} title="Dedicated account team">A named coordinator owns your bookings from quote to delivery.</FeatureCard>
+      </FeatureBand>
 
       <CTASection />
     </PageShell>

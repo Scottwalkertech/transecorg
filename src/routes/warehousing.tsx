@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Warehouse, Boxes, Thermometer, ShieldCheck, BarChart3, Zap } from "lucide-react";
-import { PageShell, FeatureCard, CTASection } from "@/components/page-shell";
+import { PageShell, FeatureCard, FeatureBand, CTASection } from "@/components/page-shell";
 import { useService } from "@/lib/services";
 
 export const Route = createFileRoute("/warehousing")({
@@ -43,15 +43,18 @@ function WarehousingPage() {
         ))}
       </div>
 
-      <h2 className="mt-16 font-display text-2xl font-bold text-foreground">What we offer</h2>
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        <FeatureCard icon={Boxes} title="Inventory management">Real-time SKU-level visibility via WMS API with low-stock alerts and forecasting.</FeatureCard>
-        <FeatureCard icon={Thermometer} title="Climate control">Ambient, chilled (2–8°C), frozen (-25°C), and humidity-controlled zones.</FeatureCard>
-        <FeatureCard icon={ShieldCheck} title="Bonded & secure">CCTV, biometric access, on-site security, and FTZ/bonded warehouse status.</FeatureCard>
-        <FeatureCard icon={Zap} title="Pick · Pack · Ship">Direct-to-consumer fulfillment with branded packaging and carrier rate shopping.</FeatureCard>
-        <FeatureCard icon={BarChart3} title="Analytics dashboard">Throughput, dwell time, and order accuracy reporting in one place.</FeatureCard>
-        <FeatureCard icon={Warehouse} title="Cross-dock & VAS">Kitting, labeling, returns processing, and quality inspection on demand.</FeatureCard>
-      </div>
+      <FeatureBand
+        title="What we offer"
+        subtitle="Climate-controlled, bonded fulfillment centers wired into your WMS in real time."
+        image="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=2400&q=80"
+      >
+        <FeatureCard variant="glass" icon={Boxes} title="Inventory management">Real-time SKU-level visibility via WMS API with low-stock alerts and forecasting.</FeatureCard>
+        <FeatureCard variant="glass" icon={Thermometer} title="Climate control">Ambient, chilled (2–8°C), frozen (-25°C), and humidity-controlled zones.</FeatureCard>
+        <FeatureCard variant="glass" icon={ShieldCheck} title="Bonded & secure">CCTV, biometric access, on-site security, and FTZ/bonded warehouse status.</FeatureCard>
+        <FeatureCard variant="glass" icon={Zap} title="Pick · Pack · Ship">Direct-to-consumer fulfillment with branded packaging and carrier rate shopping.</FeatureCard>
+        <FeatureCard variant="glass" icon={BarChart3} title="Analytics dashboard">Throughput, dwell time, and order accuracy reporting in one place.</FeatureCard>
+        <FeatureCard variant="glass" icon={Warehouse} title="Cross-dock & VAS">Kitting, labeling, returns processing, and quality inspection on demand.</FeatureCard>
+      </FeatureBand>
 
       <CTASection />
     </PageShell>
